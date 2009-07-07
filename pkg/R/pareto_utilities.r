@@ -5,6 +5,15 @@
 ##  Olaf Mersmann (OME) <olafm@statistik.tu-dortmund.de>
 ##
 
+normalizePoints <- function(front, minval, maxval) {
+  if (missing(minval))
+    minval <- apply(front, 2, min)
+  if (missing(maxval))
+    maxval <- apply(front, 2, max)
+  ## FIXME: This is ugly!
+  t((t(front) - minval)/(maxval - minval))
+}
+
 nonDominatedPoints <- function(par) {
   stopifnot(is.matrix(par))
   
@@ -23,4 +32,17 @@ nonDominatedOrdering <- function(par, partial) {
     stopifnot(is.integer(partial))
   
   .Call("nondominated_order", par, partial)
+}
+
+epsilonIndicator <- function(x, o) {
+  stopifnot(is.matrix(x))
+  stopifnot(is.matrix(o))
+
+  stopifnot(is.numeric(x))
+  stopifnot(is.numeric(o))
+  
+  if (any(x < 0) || any(o < 0))
+    stop("Epsilon Indicator only works for fronts which are strictly positive.")
+  
+  .Call("do_eps_ind", x, o)
 }
