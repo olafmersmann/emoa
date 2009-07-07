@@ -5,6 +5,12 @@
  * R but were deemed performance critical enough to warrant rewriting
  * them in C.
  *
+ * NOTICE: These functions expect the points to be passed in in column
+ * major order. That means, we expect each column of the matrix to be
+ * one point and each row to be one coordinate. This may seem counter
+ * intuitive from an R standpoint but makes all C code more cache
+ * efficient.
+ *
  * Author:
  *  Olaf Mersmann (OME) <olafm@statistik.tu-dortmund.de>
  *
@@ -24,17 +30,19 @@
  * the default format used by R.
  *
  * Returns:
- *    -1  iff points[i,] dominates points[j,]
- *     0  iff points[i,] and points[j,] are incomparable
- *     1  iff points[j,] dominates points[i,]
+ *    -1  iff points[,i] dominates points[,i]
+ *     0  iff points[,i] and points[,j] are incomparable
+ *     1  iff points[,j] dominates points[,i]
  */
-static R_INLINE int dominates(double *p, R_len_t i, R_len_t j, R_len_t nrow, R_len_t d) {
+static R_INLINE int dominates(double *p, R_len_t i, R_len_t j, R_len_t nobj) {
     int i_flagged = 0;
     int j_flagged = 0;
     R_len_t k;
-    for (k = 0; k < d; ++k) {
-	const double p_ik = p[i + nrow*k];
-	const double p_jk = p[j + nrow*k];
+    double *pi = p + i*nobj;
+    double *pj = p + j*nobj;
+    for (k = 0; k < nobj; ++k) {
+	const double p_ik = pi[k];
+	const double p_jk = pj[k];
 	if (p_ik < p_jk) {
 	    j_flagged = 1;
 	} else if (p_jk < p_ik) {
@@ -59,7 +67,7 @@ SEXP nondominated_points(SEXP s_points) {
     /* Check argument: */
     if (!isReal(s_points) || !isMatrix(s_points)) 
 	error("Argument 's_points' is not a real matrix.");
-    UNPACK_REAL_MATRIX(s_points, points, n, d);
+    UNPACK_REAL_MATRIX(s_points, points, d, n); /* Note column layout */
     
     /* Allocate result vector: 
      *
@@ -79,7 +87,7 @@ SEXP nondominated_points(SEXP s_points) {
 	    for (j = (i+1); j < n; ++j) {
                 /* Point j is also not dominated: */
 		if (res[j]) { 
-		    int dom = dominates(points, i, j, n, d);
+		    int dom = dominates(points, i, j, d);
 		    if (dom > 0) { /* i dominates j */
 			res[j] = FALSE;
 		    } else if (dom < 0) { /* j dominates i */
@@ -103,7 +111,7 @@ SEXP nondominated_points(SEXP s_points) {
 SEXP nondominated_order(SEXP s_points, SEXP s_tosort) {
     R_len_t i, j;
     SEXP s_rank;
-    UNPACK_REAL_MATRIX(s_points, points, n, d);
+    UNPACK_REAL_MATRIX(s_points, points, d, n); /* Note column layout */
     
     R_len_t nsorted = 0;
     R_len_t ntosort = INTEGER(s_tosort)[0];
@@ -127,7 +135,7 @@ SEXP nondominated_order(SEXP s_points, SEXP s_tosort) {
 
     for (i = 0; i < n; ++i) {
 	for (j = i+1; j < n; ++j) {
-	    int dom = dominates(points, i, j, n, d);
+	    int dom = dominates(points, i, j, d);
 	    if (dom < 0) { /* j dominates i */
 		S[n * i + j] = 0;
 		S[n * j + i] = 1;

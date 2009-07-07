@@ -6,12 +6,6 @@
 ##
 
 ##
-## These functions generate pareto fronts for testing:
-##
-convexFront <- function(n, d) {
-}
-
-##
 ## dominatedHypervolume - wrapper around the various C routines
 ##
 ## Currently only the code by Fonseca et.al. is included.
@@ -19,7 +13,7 @@ convexFront <- function(n, d) {
 dominatedHypervolume <- function(x, ref, algorithm) {
   ## Possibly infer reference point:
   if (missing(ref))
-    ref <- apply(x, 2, max)
+    ref <- apply(x, 1, max)
   ## Pick an algorithm:
   if (missing(algorithm))
     algorithm <- "fonseca"
@@ -27,12 +21,12 @@ dominatedHypervolume <- function(x, ref, algorithm) {
   ## Sanity checks:
   if (!is.matrix(x))
     stop("Pareto front must be a matrix")
-  if (ncol(x) != length(ref))
+  if (nrow(x) != length(ref))
     stop("Reference point and front must have the same dimension.")
 
   if (algorithm == "fonseca") {
     ## Note the transopse. do_fonseca_hv() needs the front in row major format.
-    .Call("do_fonseca_hv", t(x), ref)
+    .Call("do_fonseca_hv", x, ref)
   } else {
     stop("Unsupported algorithm '", algorithm, "'.")
   }

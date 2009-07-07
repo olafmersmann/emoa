@@ -3,10 +3,18 @@
 ##
 
 ## Predeclare some simple test fronts:
-simpleFront <- matrix(c(0.0, 1.0, 0.5, 0.5, 1.0, 0.0), ncol=2, byrow=TRUE)
-infFront <- matrix(c(0.0, Inf, 0.5, 0.5, Inf, 0.0), ncol=2, byrow=TRUE)
-naFront <- matrix(c(0.0, 1.0, NA, NA, 1.0, 0.0), ncol=2, byrow=TRUE)
-nanFront <- matrix(c(0.0, 1.0, NaN, NaN, 1.0, 0.0), ncol=2, byrow=TRUE)
+simpleFront <- matrix(c(0.0, 1.0, 0.5,
+                        1.0, 0.0, 0.5),
+                      ncol=3, byrow=TRUE)
+
+infFront <- simpleFront
+infFront[,2] <- Inf
+
+naFront <- simpleFront
+naFront[,2] <- NA
+
+nanFront <- simpleFront
+nanFront[,2] <- NaN
 
 test.dominatedHypervolume <- function() {
   checkEqualsNumeric(dominatedHypervolume(simpleFront), 0.5^2)

@@ -46,17 +46,17 @@ static double calc_eps_ind(double  *a, size_t size_a,
     eps = (additive == method) ? DBL_MIN : 0.0;
     
     for (i = 0; i < size_a; i++) {
+	double *ai = a + i*dim;
 	for (j = 0; j < size_b; j++) {
+	    double *bj = b + j*dim;
 	    for (k = 0; k < dim; k++) {
 		switch (method) {
 		case additive:
-		    /* OME: R uses a FORTRAN style matrix layout :/ */
-		    /* eps_temp = b[j * dim + k] - a[i * dim + k]; */
-		    eps_temp = b[j + size_b * k] - a[i + size_a * k];
+		    eps_temp = bj[k] - ai[k];
 		    break;
 		case multiplicative:
-		    /* eps_temp = b[j * dim + k] / a[i * dim + k]; */
-		    eps_temp = b[j + size_b * k] / a[i + size_a * k];
+		    eps_temp = bj[k] / ai[k];
+		    break;
 		}
 		if ((0 == k) || (eps_k < eps_temp))
 		    eps_k = eps_temp;

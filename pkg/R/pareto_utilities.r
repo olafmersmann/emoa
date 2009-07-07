@@ -7,15 +7,16 @@
 
 normalizePoints <- function(front, minval, maxval) {
   if (missing(minval))
-    minval <- apply(front, 2, min)
+    minval <- apply(front, 1, min)
   if (missing(maxval))
-    maxval <- apply(front, 2, max)
+    maxval <- apply(front, 1, max)
   ## FIXME: This is ugly!
-  t((t(front) - minval)/(maxval - minval))
+  (front - minval)/(maxval - minval)
 }
 
 nonDominatedPoints <- function(par) {
   stopifnot(is.matrix(par))
+  stopifnot(is.numeric(par))
   
   .Call("nondominated_points", par)
 }
@@ -25,7 +26,7 @@ nonDominatedOrdering <- function(par, partial) {
   stopifnot(is.numeric(par))
   
   if (missing(partial))
-    partial <- nrow(par)
+    partial <- ncol(par)
   else if (is.numeric(partial))
     partial <- as.integer(partial)
   else
