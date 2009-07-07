@@ -1,0 +1,11 @@
+useDynLib(emoa)
+
+## cec2009.r:
+export(UF1, UF2, UF3, UF4, UF5, UF6, UF7, UF8, UF9, UF10)
+
+## pareto_utilities.r:
+export(nonDominatedPoints)
+export(nonDominatedOrdering)
+
+## hypervolume.r:
+export(dominatedHypervolume)

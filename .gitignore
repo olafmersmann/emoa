@@ -2,3 +2,5 @@
 .Rhistory
 *~
 *.Rcheck
+*.o
+*.so
