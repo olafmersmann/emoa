@@ -1,5 +1,6 @@
-\name{UF1}
+\name{cec2009}
 \Rdversion{1.1}
+\alias{cec2009}
 \alias{UF1}
 \alias{UF2}
 \alias{UF3}
