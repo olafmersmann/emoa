@@ -34,37 +34,40 @@ UF10(x)
   \item{x}{Parameter vector}
 }
 \details{
-  These functions are not vectorized. For a simple way to evaluate
-  several parameter combinations stored in a matrix see the example
-  section below.
+  These are the 10 box constrained test functions from the CEC 2009 EMOA
+  competition.
 }
 \value{
-Value of the test function in \code{x}. For \code{UF1} to \code{UF7}
-this is a two dimensional vector, for \code{UF8}, \code{UF9} and
-\code{UF10} it is a three dimensional vector.
-}
-\references{
+  Value of the test function in \code{x}. For \code{UF1} to \code{UF7}
+  this is a two dimensional vector, for \code{UF8}, \code{UF9} and
+  \code{UF10} it is a three dimensional vector.
 }
 \author{
   Olaf Mersmann \email{olafm@statistik.tu-dortmund.de}
 }
+\note{
+  This function is not vectorized. For a simple way to apply it to a
+  matrix see \code{\link{apply}}.
+}
+\seealso{
+  \code{\link{sympart}} for another test function.
+}
 \examples{
   ## Number of samples:
-  ## n <- 10000
+  n <- 1000
   ## Sample parameter space:
-  ## par <- matrix(runif(3*n, c(0, -1, -1), c(1, 1, 1)), ncol=3, byrow=TRUE)
+  par <- matrix(runif(3*n, c(0, -1, -1), c(1, 1, 1)), nrow=3, byrow=FALSE)
   ## Evaluate function:
-  ## value <- t(apply(par, 1, UF1))
+  value <- apply(par, 2, UF2)
   ## find non dominated solutions:
-  ## d <- nonDominatedPoints(value)
+  d <- nonDominatedPoints(value)
 
   ## Plot objective space:
-  ## opar <- par(mfrow=c(1,2))
-  ## plot(value,
-  ##     col=ifelse(d, "red", "blue"),
-  ##     pch=ifelse(d, 19, 20),
-  ##     main="Objective Space")
-  ## plot(value[d,], main="Pareto Front")
-  ## par(opar)
+  pairs(t(par),
+       col=ifelse(d, "red", "black"),
+       pch=ifelse(d, 19, 1),
+       main="Objective Space")
+  ## And pareto front:
+  plot(t(value)[d,], main="Pareto Front")
 }
 \keyword{optimize}
