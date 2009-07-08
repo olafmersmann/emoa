@@ -32,7 +32,7 @@ dominatedHypervolume(x, ref, algorithm)
   respect to the reference point given in \code{ref}
 }
 \author{
-%%  ~~who you are~~
+  Olaf Mersmann \email{olafm@statistik.tu-dortmund.de}
 }
 \seealso{
   \code{\link{nonDominatedPoints}} to extract the pareto optimal points
