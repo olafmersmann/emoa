@@ -23,6 +23,8 @@
 
 #include "sexp_macros.h"
 
+#include "bitstring.h"
+
 /*
  * dominates 
  * 
@@ -116,7 +118,10 @@ SEXP nondominated_order(SEXP s_points, SEXP s_tosort) {
     R_len_t nsorted = 0;
     R_len_t ntosort = INTEGER(s_tosort)[0];
 
-    unsigned char *S = (unsigned char *)Calloc(n*n, unsigned char);
+    /* Use compact bitstring for speed and ease of managment instead
+     * of a dynamicly sized array of arrays or linkes lists.
+     */
+    bitstring_t *S = (bitstring_t *)Calloc(n, bitstring_t);
     unsigned int *N = (unsigned int *)Calloc(n, unsigned int);
 
     /* Allocate result vector: */
@@ -124,29 +129,33 @@ SEXP nondominated_order(SEXP s_points, SEXP s_tosort) {
     int *rank = INTEGER(s_rank);
 
     /* Check to make sure we exit while() loop further down even if
-     * ntosort is missspecified. */
+     * ntosort is missspecified. 
+     */
     if (ntosort > n)
 	ntosort = n;
 
-    /* Initialize array counting the number of individuals that
-     * dominate the i-th individual. */
-    for (i = 0; i < n; ++i)
+    /* Initialize bitstrings and array counting the number of
+     * individuals that dominate the i-th individual.
+     */
+    for (i = 0; i < n; ++i) {
+	bitstring_initialize(&S[i], n);
 	N[i] = 0;
+    }
 
     for (i = 0; i < n; ++i) {
 	for (j = i+1; j < n; ++j) {
 	    int dom = dominates(points, i, j, d);
 	    if (dom < 0) { /* j dominates i */
-		S[n * i + j] = 0;
-		S[n * j + i] = 1;
+		bitstring_set(S[i], j);
+		bitstring_clear(S[j], i);
 		++N[i];
 	    } else if (dom > 0) { /* i dominates j */
-		S[n * i + j] = 1;
-		S[n * j + i] = 0;
+		bitstring_clear(S[i], j);
+		bitstring_set(S[j], i);
 		++N[j];
 	    } else { /* neither dominates the other */
-		S[n * i + j] = 0;
-		S[n * j + i] = 0;
+		bitstring_set(S[i], j);
+		bitstring_set(S[j], i);
 	    }
 	}
     }
@@ -166,9 +175,9 @@ SEXP nondominated_order(SEXP s_points, SEXP s_tosort) {
     while (nsorted < ntosort) {
 	for (i = 0; i < n; ++i) {
 	    if (r != rank[i])  /* Skip all not in current rank */
-		continue;      
+		continue;
 	    for (j = 0; j < n; ++j) {
-		if (1 == S[n * i + j]) { /* j in S_i */
+		if (bitstring_is_clear(S[i], j)) { /* j in S_i */
 		    --N[j];
 		    if (0 == N[j]) { /* N_j == 0 -> assign rank */
 			rank[j] = r + 1;
@@ -179,6 +188,10 @@ SEXP nondominated_order(SEXP s_points, SEXP s_tosort) {
 	}
 	++r;
     }
+    
+    /* Free bitstrings and arrays */
+    for (i = 0; i < n; ++i)
+	bitstring_delete(S[i]);
     Free(S);
     Free(N);
     UNPROTECT(1); /* s_rank */
