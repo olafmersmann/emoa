@@ -11,8 +11,11 @@ check: clean data
 
 data: pkg/data/cec2007.rda
 
-pkg/data/cec2007.rda: data/cec2007/convert.r $(ls data/cec2007/*.txt)
+pkg/data/cec2007.rda: data/cec2007/convert.r $(ls data/cec2007/*.txt) pkg/data
 	(cd data/cec2007/ ; Rscript convert.r)
+
+pkg/data:
+	mkdir pkg/data
 
 clean:
 	rm -fR pkg/src/*.o pkg/src/*.so pkg.Rcheck .RData .Rhistory
