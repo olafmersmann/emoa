@@ -6,11 +6,11 @@
 ##
 
 ##
-## dominatedHypervolume - wrapper around the various C routines
+## dominated_hypervolume - wrapper around the various C routines
 ##
 ## Currently only the code by Fonseca et.al. is included.
 ##
-dominatedHypervolume <- function(x, ref, algorithm) {
+dominated_hypervolume <- function(x, ref, algorithm) {
   ## Possibly infer reference point:
   if (missing(ref))
     ref <- apply(x, 1, max)

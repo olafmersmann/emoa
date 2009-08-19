@@ -60,7 +60,7 @@ UF10(x)
   ## Evaluate function:
   value <- apply(par, 2, UF2)
   ## find non dominated solutions:
-  d <- nonDominatedPoints(value)
+  d <- nondominated_points(value)
 
   ## Plot objective space:
   pairs(t(par),

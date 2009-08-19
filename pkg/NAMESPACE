@@ -7,12 +7,12 @@ export(UF1, UF2, UF3, UF4, UF5, UF6, UF7, UF8, UF9, UF10)
 export(sympart)
 
 ## pareto_utilities.r:
-export(nonDominatedPoints)
-export(nonDominatedOrdering)
-export(epsilonIndicator)
+export(nondominated_points)
+export(nondominated_ordering)
+export(epsilon_indicator)
 
 ## hypervolume.r:
-export(dominatedHypervolume)
+export(dominated_hypervolume)
 
 ## sbx_crossover.r
 export(sbx_crossover)

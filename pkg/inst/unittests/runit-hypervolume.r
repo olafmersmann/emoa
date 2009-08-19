@@ -16,33 +16,33 @@ naFront[,2] <- NA
 nanFront <- simpleFront
 nanFront[,2] <- NaN
 
-test.dominatedHypervolume <- function() {
-  checkEqualsNumeric(dominatedHypervolume(simpleFront), 0.5^2)
-  checkEqualsNumeric(dominatedHypervolume(simpleFront, c(1.0, 1.0)), 0.5^2)
+test.dominated_hypervolume <- function() {
+  checkEqualsNumeric(dominated_hypervolume(simpleFront), 0.5^2)
+  checkEqualsNumeric(dominated_hypervolume(simpleFront, c(1.0, 1.0)), 0.5^2)
   ## OME: FIXME should ignore outer points?
-  ## checkEqualsNumeric(dominatedHypervolume(simpleFront, c(0.8, 0.8)), 0.3^2)
-  checkEqualsNumeric(dominatedHypervolume(simpleFront, c(2.0, 2.0)), 3.25)
-  checkEqualsNumeric(dominatedHypervolume(simpleFront, c(0.0, 0.0)), -0.75)
-  checkEqualsNumeric(dominatedHypervolume(simpleFront, c(0.5, 0.5)), -0.50)
-  checkEqualsNumeric(dominatedHypervolume(simpleFront, c(NaN, NaN)), NaN)
+  ## checkEqualsNumeric(dominated_hypervolume(simpleFront, c(0.8, 0.8)), 0.3^2)
+  checkEqualsNumeric(dominated_hypervolume(simpleFront, c(2.0, 2.0)), 3.25)
+  checkEqualsNumeric(dominated_hypervolume(simpleFront, c(0.0, 0.0)), -0.75)
+  checkEqualsNumeric(dominated_hypervolume(simpleFront, c(0.5, 0.5)), -0.50)
+  checkEqualsNumeric(dominated_hypervolume(simpleFront, c(NaN, NaN)), NaN)
 }
 
 test.badFront <- function() {
   ## OME: Should probably also return NaN instead of NA
-  checkEquals(is.na(dominatedHypervolume(naFront)), TRUE)
-  checkEquals(dominatedHypervolume(nanFront), NaN)
+  checkEquals(is.na(dominated_hypervolume(naFront)), TRUE)
+  checkEquals(dominated_hypervolume(nanFront), NaN)
 }
 
 test.infFront <- function() {
   ## OME: These should probably be reworked to return 'saner' values.
-  checkEquals(dominatedHypervolume(infFront), NaN)
-  checkEquals(dominatedHypervolume(infFront, ref=c(1, 1)), NaN)
-  checkEquals(dominatedHypervolume(simpleFront, ref=c(Inf, Inf)), Inf)
+  checkEquals(dominated_hypervolume(infFront), NaN)
+  checkEquals(dominated_hypervolume(infFront, ref=c(1, 1)), NaN)
+  checkEquals(dominated_hypervolume(simpleFront, ref=c(Inf, Inf)), Inf)
 }
 
 test.badInput <- function() {
-  checkException(dominatedHypervolume(1:10))
-  checkException(dominatedHypervolume("abc"))
-  checkException(dominatedHypervolume(simpleFront, 1:3))
-  checkException(dominatedHypervolume(simpleFront, 1))
+  checkException(dominated_hypervolume(1:10))
+  checkException(dominated_hypervolume("abc"))
+  checkException(dominated_hypervolume(simpleFront, 1:3))
+  checkException(dominated_hypervolume(simpleFront, 1))
 }

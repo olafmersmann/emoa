@@ -1,6 +1,6 @@
-\name{epsilonIndicator}
+\name{epsilon_indicator}
 \Rdversion{1.1}
-\alias{epsilonIndicator}
+\alias{epsilon_indicator}
 \title{
   Epsilon Indicator calculation
 }
@@ -8,7 +8,7 @@
   Calculates the epsilon indicator.
 }
 \usage{
-  epsilonIndicator(x, o)
+  epsilon_indicator(x, o)
 }
 \arguments{
   \item{x}{Set of points for which to calculate the criterion}

@@ -5,7 +5,7 @@
 ##  Olaf Mersmann (OME) <olafm@statistik.tu-dortmund.de>
 ##
 
-normalizePoints <- function(front, minval, maxval) {
+normalize_points <- function(front, minval, maxval) {
   if (missing(minval))
     minval <- apply(front, 1, min)
   if (missing(maxval))
@@ -14,14 +14,14 @@ normalizePoints <- function(front, minval, maxval) {
   (front - minval)/(maxval - minval)
 }
 
-nonDominatedPoints <- function(par) {
+nondominated_points <- function(par) {
   stopifnot(is.matrix(par))
   stopifnot(is.numeric(par))
   
   .Call("nondominated_points", par)
 }
 
-nonDominatedOrdering <- function(par, partial) {
+nondominated_ordering <- function(par, partial) {
   stopifnot(is.matrix(par))
   stopifnot(is.numeric(par))
   
@@ -35,7 +35,7 @@ nonDominatedOrdering <- function(par, partial) {
   .Call("nondominated_order", par, partial)
 }
 
-epsilonIndicator <- function(x, o) {
+epsilon_indicator <- function(x, o) {
   stopifnot(is.matrix(x))
   stopifnot(is.matrix(o))
 

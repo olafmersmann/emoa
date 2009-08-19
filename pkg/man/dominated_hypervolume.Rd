@@ -1,6 +1,6 @@
-\name{dominatedHypervolume}
+\name{dominated_hypervolume}
 \Rdversion{1.1}
-\alias{dominatedHypervolume}
+\alias{dominated_hypervolume}
 \title{
   Dominated Hypervolume calculation
 }
@@ -9,9 +9,8 @@
   \code{x} subject to the reference point \code{ref}.
 }
 \usage{
-dominatedHypervolume(x, ref, algorithm)
+dominated_hypervolume(x, ref, algorithm)
 }
-%- maybe also 'usage' for other objects documented here.
 \arguments{
   \item{x}{Points}
   \item{ref}{Reference point for hypervolume calculation}
@@ -35,7 +34,7 @@ dominatedHypervolume(x, ref, algorithm)
   Olaf Mersmann \email{olafm@statistik.tu-dortmund.de}
 }
 \seealso{
-  \code{\link{nonDominatedPoints}} to extract the pareto optimal points
+  \code{\link{nondominated_points}} to extract the pareto optimal points
   for a given set of points.
 }
 \examples{

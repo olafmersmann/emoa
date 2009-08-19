@@ -15,7 +15,7 @@ points <- matrix(c(1.0, 0.0, 0.0,
 nd <- c(TRUE, TRUE, TRUE, TRUE, FALSE, FALSE, FALSE, FALSE)
 no <- c(1, 1, 1, 1, 2, 2, 2, 3)
 
-test.nonDominatedPoints <- function() {
+test.nondominated_points <- function() {
   k <- nrow(points)
   n <- ncol(points)
   ## Check for different permutations of the rows and columns of
@@ -24,18 +24,18 @@ test.nonDominatedPoints <- function() {
     o <- sample(1:n)
     p <- sample(1:k)
     m <- points[p,o]
-    res <- nonDominatedPoints(m)
+    res <- nondominated_points(m)
     checkEquals(res, nd[o])
   }  
 }
 
-test.nonDominatedPoints.args <- function() {
-  checkException(nonDominatedPoints("a"))
-  checkException(nonDominatedPoints(list(1, 2, 3)))
-  checkException(nonDominatedPoints(data.frame(x=1:10)))
+test.nondominated_points.args <- function() {
+  checkException(nondominated_points("a"))
+  checkException(nondominated_points(list(1, 2, 3)))
+  checkException(nondominated_points(data.frame(x=1:10)))
 }
 
-test.nonDominatedOrdering <- function() {
+test.nondominated_ordering <- function() {
   k <- nrow(points)
   n <- ncol(points)
   ## Check for different permutations of the rows and columns of
@@ -43,14 +43,14 @@ test.nonDominatedOrdering <- function() {
   for (i in 1:10) {
     o <- sample(1:n)
     p <- sample(1:k)
-    checkEquals(nonDominatedOrdering(points[p,o]), no[o])
+    checkEquals(nondominated_ordering(points[p,o]), no[o])
   }  
 }
 
-test.nonDominatedOrdering.args <- function() {
-  checkException(nonDominatedOrdering("a"))
-  checkException(nonDominatedOrdering(1))
-  checkException(nonDominatedOrdering(list(1, 2, 3)))
-  checkException(nonDominatedOrdering(data.frame(x=1:10)))
-  checkException(nonDominatedOrdering(points, partial="a"))
+test.nondominated_ordering.args <- function() {
+  checkException(nondominated_ordering("a"))
+  checkException(nondominated_ordering(1))
+  checkException(nondominated_ordering(list(1, 2, 3)))
+  checkException(nondominated_ordering(data.frame(x=1:10)))
+  checkException(nondominated_ordering(points, partial="a"))
 }
