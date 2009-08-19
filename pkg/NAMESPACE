@@ -13,3 +13,9 @@ export(epsilonIndicator)
 
 ## hypervolume.r:
 export(dominatedHypervolume)
+
+## sbx_crossover.r
+export(sbx_crossover)
+
+## poly_mutation.r
+export(poly_mutation)
