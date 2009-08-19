@@ -20,3 +20,10 @@ rsbxbeta <- function(n, nc) {
 inbounds <- function(x, l, u) {
   ifelse(x < l, l, ifelse(x > u, u, x))
 }
+
+## coalesce - return first non null argument.
+coalesce <- function(...) {
+  l <- list(...)
+  isnull <- sapply(l, is.null)
+  l[[which.min(isnull)]]
+}
