@@ -13,7 +13,7 @@ typedef struct {
     bs_base_t *string;
 } bitstring_t;
 
-const size_t bs_base_size = sizeof(bs_base_t);
+const size_t bs_base_size = 8*sizeof(bs_base_t);
 
 static R_INLINE void bitstring_initialize(bitstring_t *bs, size_t size) {
     bs->size = size;

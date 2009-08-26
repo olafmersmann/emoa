@@ -141,7 +141,6 @@ SEXP nondominated_order(SEXP s_points, SEXP s_tosort) {
 	bitstring_initialize(&S[i], n);
 	N[i] = 0;
     }
-
     for (i = 0; i < n; ++i) {
 	for (j = i+1; j < n; ++j) {
 	    int dom = dominates(points, i, j, d);
@@ -173,6 +172,7 @@ SEXP nondominated_order(SEXP s_points, SEXP s_tosort) {
     /* Assign remaining ranks: */
     int r = 1;
     while (nsorted < ntosort) {
+	R_CheckUserInterrupt();
 	for (i = 0; i < n; ++i) {
 	    if (r != rank[i])  /* Skip all not in current rank */
 		continue;
