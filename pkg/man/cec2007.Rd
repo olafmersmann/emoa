@@ -12,15 +12,16 @@
 \format{
   A data frame with 456 observations on the following 9 variables.
   \describe{
-    \item{\code{algo}}{Abbreviated name of algorithm}
-    \item{\code{fun}}{Name of benchmark function}
-    \item{\code{d}}{Dimension of objective space}
-    \item{\code{n}}{Number of function evaluations}
-    \item{\code{best}}{Largest dominated hypervolume}
-    \item{\code{median}}{Median dominated hypervolume}
-    \item{\code{worst}}{lSmallest dominated hypervolume}
-    \item{\code{mean}}{average dominated hypervolume}
-    \item{\code{std}}{standard deviation of dominated hypervolume indicator}
+    \item{\code{algo}}{abbreviated name of algorithm}
+    \item{\code{fun}}{name of benchmark function}
+    \item{\code{d}}{dimension of objective space}
+    \item{\code{n}}{number of function evaluations}
+    \item{\code{metric}}{name of quality metric}
+    \item{\code{best}}{largest value of metric}
+    \item{\code{median}}{median value of metric}
+    \item{\code{worst}}{smallest value of metric}
+    \item{\code{mean}}{average value of metric}
+    \item{\code{std}}{standard deviation of metric}
   }
 }
 \source{
@@ -32,7 +33,7 @@
   \dontrun{
   data(cec2007)
   require(lattice)
-  print(dotplot(algo ~ median | fun, cec2007, groups=cec2007$n))
+  print(dotplot(algo ~ median | fun + metric, cec2007, groups=cec2007$n))
   }
 }
 \keyword{datasets}

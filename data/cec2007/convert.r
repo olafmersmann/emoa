@@ -55,22 +55,27 @@ readPerf <- function(filename, algo) {
     header <- parseHeader(block[2])
     d <- as.integer(strsplit(block[1], " ")[[1]][2])
     data <- cbind(algo,
-               rbind(parseChunk(block[3:7], header, d),
-                     parseChunk(block[8:12], header, d),               
-                     parseChunk(block[13:17], header, d)))    
+                  rbind(parseChunk(block[3:7], header, d),
+                        parseChunk(block[8:12], header, d),               
+                        parseChunk(block[13:17], header, d)))    
     res <- rbind(res, data)
   }
   return(res)
 }
 
-cec2007 <- rbind(readPerf("mo_de-hv.txt", "mo_de"),
-           readPerf("mo_pso-hv.txt", "mo_pso"),
-           readPerf("nsga2_sbx-hv.txt", "nsga2_sbx"),
-           readPerf("nsga2_pcx-hv.txt", "nsga2_pcx"),
-           readPerf("mts-hv.txt", "mts"),
-           readPerf("mosade-hv.txt", "mosade"),
-           readPerf("gde3-hv.txt", "gde3"),
-           readPerf("demowsa-hv.txt", "demowsa")
-           )
+cec2007_hv <- rbind(readPerf("mo_de-hv.txt", "mo_de"),
+                    readPerf("mo_pso-hv.txt", "mo_pso"),
+                    readPerf("nsga2_sbx-hv.txt", "nsga2_sbx"),
+                    readPerf("nsga2_pcx-hv.txt", "nsga2_pcx"),
+                    readPerf("mts-hv.txt", "mts"),
+                    readPerf("mosade-hv.txt", "mosade"),
+                    readPerf("gde3-hv.txt", "gde3"),
+                    readPerf("demowsa-hv.txt", "demowsa")
+                    )
+
+cec2007_hv$metric <- "hv"
+
+
+cec2007 <- cec2007_hv
 
 save(cec2007, file="../../pkg/data/cec2007.rda")
