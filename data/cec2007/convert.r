@@ -75,7 +75,18 @@ cec2007_hv <- rbind(readPerf("mo_de-hv.txt", "mo_de"),
 
 cec2007_hv$metric <- "hv"
 
+cec2007_r2 <- rbind(readPerf("mo_de-r2.txt", "mo_de"),
+		    readPerf("mo_pso-r2.txt", "mo_pso"),
+		    readPerf("nsga2_sbx-r2.txt", "nsga2_sbx"),
+		    readPerf("nsga2_pcx-r2.txt", "nsga2_pcx"),
+		    readPerf("mts-r2.txt", "mts"),
+		    readPerf("mosade-r2.txt", "mosade"),
+                    readPerf("gde3-r2.txt", "gde3"),
+		    readPerf("demowsa-r2.txt", "demowsa")
+                    )
 
-cec2007 <- cec2007_hv
+cec2007_r2$metric <- "r2"
+
+cec2007 <- rbind(cec2007_hv, cec2007_r2)
 
 save(cec2007, file="../../pkg/data/cec2007.rda")
