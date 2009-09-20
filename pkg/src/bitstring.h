@@ -19,7 +19,6 @@ static R_INLINE void bitstring_initialize(bitstring_t *bs, size_t size) {
     bs->size = size;
     bs->string = (uint32_t *)malloc(size / bs_base_size + 1);
     memset(bs->string, 0, size / bs_base_size + 1);
-    return bs;
 }
 
 static R_INLINE void bitstring_delete(bitstring_t bs) {
