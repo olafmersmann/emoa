@@ -89,4 +89,9 @@ cec2007_r2$metric <- "r2"
 
 cec2007 <- rbind(cec2007_hv, cec2007_r2)
 
+pdef <- unique(cec2007[, c("fun", "d", "n", "metric")])
+pdef$pdef <- 1:nrow(pdef)
+
+cec2007 <- merge(cec2007, pdef)
+
 save(cec2007, file="../../pkg/data/cec2007.rda")

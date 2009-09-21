@@ -17,6 +17,7 @@
     \item{\code{d}}{dimension of objective space}
     \item{\code{n}}{number of function evaluations}
     \item{\code{metric}}{name of quality metric}
+    \item{\code{pdef}}{unique id for each combination of \code{fun}, \code{d}, \code{n} and \code{metric}}
     \item{\code{best}}{largest value of metric}
     \item{\code{median}}{median value of metric}
     \item{\code{worst}}{smallest value of metric}
