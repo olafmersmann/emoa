@@ -83,10 +83,7 @@ static double calc_eps_ind(double  *a, size_t size_a,
 
 SEXP do_eps_ind(SEXP s_data, SEXP s_ref) {
     SEXP s_res;
-    
-    if (!isReal(s_data)) error("Argument 's_data' is not a real matrix.");
-    if (!isReal(s_ref))  error("Argument 's_ref' is not a real matrix.");
-    
+        
     /* Unpack arguments */
     UNPACK_REAL_MATRIX(s_data, data, n_data, k_data);
     UNPACK_REAL_MATRIX(s_ref, ref, n_ref, k_ref);

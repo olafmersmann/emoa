@@ -10,6 +10,9 @@ export(sympart)
 export(nondominated_points)
 export(nondominated_ordering)
 export(epsilon_indicator)
+export(r1_indicator)
+export(r2_indicator)
+export(r3_indicator)
 
 ## hypervolume.r:
 export(dominated_hypervolume)

@@ -299,8 +299,6 @@ static void UF10(double *x, double *f, const unsigned int nx) {
     SEXP do_##U (SEXP s_x) {						\
 	R_len_t i;							\
 	SEXP s_res;							\
-	if (!isReal(s_x) || !isVector(s_x))				\
-	    error("Argument 's_x' is not a numeric vector.");		\
 	UNPACK_REAL_VECTOR(s_x, x, n);					\
 	PROTECT(s_res = allocVector(REALSXP, 3));			\
 	double *res = REAL(s_res);					\
