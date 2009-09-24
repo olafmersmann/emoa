@@ -466,7 +466,7 @@ static int compare_tree_asc( const void *p1, const void *p2) {
 /*
  * Setup circular double-linked list in each dimension
  */
-static dlnode_t * setup_cdllist(double *data, int d, int n) {
+static dlnode_t * setup_cdllist(const double *data, const int d, const int n) {
   dlnode_t *head;
   dlnode_t **scratch;
   int i, j;
@@ -524,7 +524,7 @@ static void delete(dlnode_t *nodep, int dim, double *bound) {
     }
 }
 
-static void reinsert (dlnode_t *nodep, int dim, double * bound) {
+static void reinsert(dlnode_t *nodep, int dim, double * bound) {
     int i;
     
     for (i = 0; i < dim; i++) {
@@ -535,7 +535,7 @@ static void reinsert (dlnode_t *nodep, int dim, double * bound) {
     }
 }
 
-static double hv_recursive( dlnode_t *list, int dim, int c, const double * ref, double * bound) {
+static double hv_recursive(dlnode_t *list, int dim, int c, const double * ref, double * bound) {
     dlnode_t *p0,*p1,*pp;
     double hypera,hyperv=0;
     double height;
@@ -687,41 +687,113 @@ static double hv_recursive( dlnode_t *list, int dim, int c, const double * ref, 
     }
 }
 
+double calc_hypervolume(const double *data, const double *ref, const size_t n, const size_t k) {
+    dlnode_t *list;
+    double *bound, res;
+    
+    bound = Calloc(k, double);
+    for (int i = 0; i < k; i++) 
+	bound[i] = -DBL_MAX;
+    
+    tree = avl_alloc_tree((avl_compare_t) compare_tree_asc, (avl_freeitem_t) free); 
+    list = setup_cdllist(data, k, n); 
+    res = hv_recursive(list, k - 1, n, ref, bound);
+    Free(bound);
+    avl_free_tree(tree);
+    return(res);
+}
+
+void calc_hv_contrib_2d(const double *data, const double *ref, double *res, const size_t n, const size_t k) {
+    int i,j,l;
+    double mindistplus;
+
+    for (i = 0; i < n; ++i) {
+        double dvol = 1.0;
+        for (j = 0; j < k; ++j) {
+            const double fij = data[k*i + j];
+            mindistplus = DBL_MAX; 
+            for (l = 0; l < n; ++l) {
+                if (l != i) {
+		    const double flj = data[k*l + j];
+                    const double delta = flj - fij;
+                    if (delta >= 0.0 && delta < mindistplus)
+                        mindistplus = delta;
+                }
+            }
+            dvol *= mindistplus;
+        }
+	res[i] = dvol;
+    }
+}
+
+void calc_hv_contrib_anyd(double *data, const double *ref, double *res, const size_t n, size_t k) {
+    const double tothv = calc_hypervolume(data, ref, n, k);
+
+    for (int i = 0; i < n; ++i) {
+	const double ihv = calc_hypervolume(data + k, ref, n - 1, k);
+	res[i] = tothv - ihv;
+	/* Swap ith and last row in data matrix: */
+	if (i != (n - 1)) {
+	    for (int j = 0; j < k; ++j) {
+		double tmp = data[k * (i+1) + j];
+		data[k * (i+1) + j] = data[j];
+		data[j] = tmp;
+	    }
+	}
+    }    
+}
+
 SEXP do_fonseca_hv(SEXP s_data, SEXP s_ref) {
-  SEXP s_res;
-  dlnode_t *list;
-  double *bound;
-  int i;
+    SEXP s_res;
+    dlnode_t *list;
+    double *bound;
+    int i;
+    
+    /* Unpack arguments:
+     *
+     * Since we need s_data in row major format, it is passed in
+     * transposed in column major format (R's internal format for
+     * matricies). That means the number of rows and columns are
+     * switched.
+     */
+    UNPACK_REAL_MATRIX(s_data, data, k_data, n_data);
+    UNPACK_REAL_VECTOR(s_ref, ref, n_ref);
+    
+    if (n_ref != k_data)
+	error("ref and data must have the same dimension.");
+    
+    /* Allocate result */
+    PROTECT(s_res = allocVector(REALSXP, 1));
+    double *res = REAL(s_res);
+
+    res[0] = calc_hypervolume(data, ref, n_data, k_data);
+
+    UNPROTECT(1); /* s_res */
+    return s_res;
+}
+
+SEXP do_hv_contrib(SEXP s_data, SEXP s_ref) {
+    SEXP s_res;
+    int i;
   
-  if (!isReal(s_data)) error("Argument 's_data' is not a real matrix.");
-  if (!isReal(s_ref))  error("Argument 's_ref' is not a real vector.");
+    UNPACK_REAL_MATRIX(s_data, data, k_data, n_data);
+    UNPACK_REAL_VECTOR(s_ref, ref, n_ref);
 
-  /* Unpack arguments:
-   *
-   * Since we need s_data in row major format, it is passed in
-   * transposed in column major format (R's internal format for
-   * matricies). That means the number of rows and columns are
-   * switched.
-   */
-  UNPACK_REAL_MATRIX(s_data, data, k_data, n_data);
-  UNPACK_REAL_VECTOR(s_ref, ref, n_ref);
+    if (n_ref != k_data)
+	error("ref and data must have the same dimension.");
+    
+    /* Allocate result */
+    PROTECT(s_res = allocVector(REALSXP, n_data));
+    double *res = REAL(s_res);
 
-  if (n_ref != k_data)
-    error("ref and data must be same dimension.");
-
-  /* Allocate result */
-  PROTECT(s_res = allocVector(REALSXP, 1));
-  double *res = REAL(s_res);
-
-  bound = Calloc(k_data, double);
-  for (i = 0; i < k_data; i++) 
-    bound[i] = -DBL_MAX;
-
-  tree = avl_alloc_tree((avl_compare_t) compare_tree_asc, (avl_freeitem_t) free); 
-  list = setup_cdllist(data, k_data, n_data); 
-  res[0] = hv_recursive(list, k_data - 1, n_data, ref, bound);
-  Free(bound);
-  avl_free_tree(tree);
-  UNPROTECT(1); /* s_res */
-  return s_res;
+    switch (k_data) {
+    case 2:
+	calc_hv_contrib_2d(data, ref, res, n_data, k_data);
+	break;
+    default:
+	calc_hv_contrib_anyd(data, ref, res, n_data, k_data);
+	break;
+    }
+    UNPROTECT(1); /* s_res */
+    return s_res;
 }

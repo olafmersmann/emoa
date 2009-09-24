@@ -25,9 +25,27 @@ dominated_hypervolume <- function(x, ref, algorithm) {
     stop("Reference point and front must have the same dimension.")
 
   if (algorithm == "fonseca") {
-    ## Note the transopse. do_fonseca_hv() needs the front in row major format.
     .Call("do_fonseca_hv", x, ref)
   } else {
     stop("Unsupported algorithm '", algorithm, "'.")
   }
 }
+
+##
+## hypervolume_contribution - calculate hv contribution for a front
+##
+hypervolume_contribution <- function(x, ref) {
+  ## Possibly infer reference point:
+  if (missing(ref))
+    ref <- apply(x, 1, max) + 1
+
+  ## Sanity checks:
+  if (!is.matrix(x))
+    stop("Pareto front must be a matrix")
+  if (nrow(x) != length(ref))
+    stop("Reference point and front must have the same dimension.")
+
+  ## Call C code:
+  .Call("do_hv_contrib", x, ref)
+}
+

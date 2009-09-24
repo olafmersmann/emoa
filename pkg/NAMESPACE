@@ -16,6 +16,7 @@ export(r3_indicator)
 
 ## hypervolume.r:
 export(dominated_hypervolume)
+export(hypervolume_contribution)
 
 ## sbx_crossover.r
 export(sbx_crossover)
