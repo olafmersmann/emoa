@@ -1,7 +1,1 @@
-.RData
-.Rhistory
-*~
-*.Rcheck
-*.o
-*.so
-.#*
+pkg/src/Makevars
