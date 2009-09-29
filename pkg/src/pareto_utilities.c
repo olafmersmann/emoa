@@ -23,6 +23,7 @@
 
 #include "sexp_macros.h"
 
+#define BS_INLINE R_INLINE
 #include "bitstring.h"
 
 /*
@@ -32,7 +33,7 @@
  * the default format used by R.
  *
  * Returns:
- *    -1  iff points[,i] dominates points[,i]
+ *    -1  iff points[,i] dominates points[,j]
  *     0  iff points[,i] and points[,j] are incomparable
  *     1  iff points[,j] dominates points[,i]
  */
@@ -64,7 +65,7 @@ static R_INLINE int dominates(double *p, R_len_t i, R_len_t j, R_len_t nobj) {
  */
 SEXP nondominated_points(SEXP s_points) {
     SEXP s_res;
-    R_len_t i, j, k;
+    R_len_t i, j;
     
     /* Check argument: */
     if (!isReal(s_points) || !isMatrix(s_points)) 
@@ -103,7 +104,6 @@ SEXP nondominated_points(SEXP s_points) {
     return s_res;
 }
 
-
 /*
  * nondominated_order
  *
@@ -113,13 +113,13 @@ SEXP nondominated_points(SEXP s_points) {
 SEXP nondominated_order(SEXP s_points, SEXP s_tosort) {
     R_len_t i, j;
     SEXP s_rank;
-    UNPACK_REAL_MATRIX(s_points, points, d, n); /* Note column layout */
+    UNPACK_REAL_MATRIX(s_points, points, d, n); /* Note column major layout */
     
     R_len_t nsorted = 0;
     R_len_t ntosort = INTEGER(s_tosort)[0];
 
     /* Use compact bitstring for speed and ease of managment instead
-     * of a dynamicly sized array of arrays or linkes lists.
+     * of a dynamicly sized array of arrays or linked lists.
      */
     bitstring_t *S = (bitstring_t *)Calloc(n, bitstring_t);
     unsigned int *N = (unsigned int *)Calloc(n, unsigned int);
@@ -138,23 +138,21 @@ SEXP nondominated_order(SEXP s_points, SEXP s_tosort) {
      * individuals that dominate the i-th individual.
      */
     for (i = 0; i < n; ++i) {
+	S[i].string = NULL;
 	bitstring_initialize(&S[i], n);
 	N[i] = 0;
     }
+
     for (i = 0; i < n; ++i) {
 	for (j = i+1; j < n; ++j) {
 	    int dom = dominates(points, i, j, d);
 	    if (dom < 0) { /* j dominates i */
-		bitstring_set(S[i], j);
-		bitstring_clear(S[j], i);
+		bitstring_set(S[j], i);
 		++N[i];
 	    } else if (dom > 0) { /* i dominates j */
-		bitstring_clear(S[i], j);
-		bitstring_set(S[j], i);
+		bitstring_set(S[i], j);
 		++N[j];
 	    } else { /* neither dominates the other */
-		bitstring_set(S[i], j);
-		bitstring_set(S[j], i);
 	    }
 	}
     }
@@ -165,19 +163,18 @@ SEXP nondominated_order(SEXP s_points, SEXP s_tosort) {
 	    rank[i] = 1;
 	    ++nsorted;
 	} else { /* Not yet decide what front i belongs to */
-	    rank[i] = -1;
+	    rank[i] = 0;
 	}
     }
 
     /* Assign remaining ranks: */
     int r = 1;
     while (nsorted < ntosort) {
-	R_CheckUserInterrupt();
 	for (i = 0; i < n; ++i) {
 	    if (r != rank[i])  /* Skip all not in current rank */
 		continue;
 	    for (j = 0; j < n; ++j) {
-		if (bitstring_is_clear(S[i], j)) { /* j in S_i */
+		if (bitstring_is_set(S[i], j)) { /* j in S_i */
 		    --N[j];
 		    if (0 == N[j]) { /* N_j == 0 -> assign rank */
 			rank[j] = r + 1;
@@ -187,6 +184,11 @@ SEXP nondominated_order(SEXP s_points, SEXP s_tosort) {
 	    }
 	}
 	++r;
+	/* Emergency exit: */
+	if (r > n) {
+	    error("r > n. This should never happen. "
+		  "Please send a detailed bug report to the package author.");
+	}
     }
     
     /* Free bitstrings and arrays */

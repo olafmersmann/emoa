@@ -47,6 +47,15 @@ test.nondominated_ordering <- function() {
   }  
 }
 
+test.nondominated_ordering.big <- function() {
+  n <- ncol(points)
+  i <- sample(rep(1:n, length.out=1024L))
+  pp <- points[,i]
+  nn <- nd[i]
+  res <- nondominated_points(pp)
+  checkEquals(res, nn)
+}
+
 test.nondominated_ordering.args <- function() {
   checkException(nondominated_ordering("a"))
   checkException(nondominated_ordering(1))
