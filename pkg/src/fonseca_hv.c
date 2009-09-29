@@ -473,7 +473,7 @@ static dlnode_t * setup_cdllist(const double *data, const int d, const int n) {
 
   head = (dlnode_t *) R_alloc (n+1, sizeof(dlnode_t));
 
-  head->x = data;
+  head->x = (double *)data;
   head->ignore = 0;  /* should never get used */
   head->next   = (dlnode_t **)R_alloc(d * (n+1), sizeof(dlnode_t*));
   head->prev   = (dlnode_t **)R_alloc(d * (n+1), sizeof(dlnode_t*));
@@ -704,7 +704,7 @@ double calc_hypervolume(const double *data, const double *ref, const size_t n, c
 }
 
 void calc_hv_contrib_2d(const double *data, const double *ref, double *res, const size_t n, const size_t k) {
-    int i,j,l;
+    size_t i,j,l;
     double mindistplus;
 
     for (i = 0; i < n; ++i) {
@@ -745,9 +745,6 @@ void calc_hv_contrib_anyd(double *data, const double *ref, double *res, const si
 
 SEXP do_fonseca_hv(SEXP s_data, SEXP s_ref) {
     SEXP s_res;
-    dlnode_t *list;
-    double *bound;
-    int i;
     
     /* Unpack arguments:
      *
@@ -774,7 +771,6 @@ SEXP do_fonseca_hv(SEXP s_data, SEXP s_ref) {
 
 SEXP do_hv_contrib(SEXP s_data, SEXP s_ref) {
     SEXP s_res;
-    int i;
   
     UNPACK_REAL_MATRIX(s_data, data, k_data, n_data);
     UNPACK_REAL_VECTOR(s_ref, ref, n_ref);

@@ -41,7 +41,7 @@ static double calc_eps_ind(double  *a, size_t size_a,
 			   double  *b, size_t size_b, 
 			   size_t dim, method_t method) {
     size_t i, j, k;
-    double  eps, eps_j, eps_k, eps_temp;
+    double  eps, eps_j = 0.0, eps_k = 0.0, eps_temp;
     
     eps = (additive == method) ? DBL_MIN : 0.0;
     
