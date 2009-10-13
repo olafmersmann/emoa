@@ -15,6 +15,19 @@ points <- matrix(c(1.0, 0.0, 0.0,
 nd <- c(TRUE, TRUE, TRUE, TRUE, FALSE, FALSE, FALSE, FALSE)
 no <- c(1, 1, 1, 1, 2, 2, 2, 3)
 
+test.hv_indicators <- function() {
+  p1 <- points[, no==1]
+  p2 <- points[, no==2]
+
+  I12 <- hypervolume_indicator(p1, p2, ref=c(1, 1, 1))
+  I21 <- hypervolume_indicator(p2, p1, ref=c(1, 1, 1))
+  checkEquals(I21, 0.013)
+  checkEquals(I12, -I21)
+
+  I21p <- hypervolume_indicator(p2, p1, ref=c(10, 10, 10))
+  checkTrue(I21 < I21p)
+}
+
 test.r_indicators <- function() {
   p1 <- points[, no==1]
   p2 <- points[, no==2]

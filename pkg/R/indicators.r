@@ -15,7 +15,19 @@ normalize_points <- function(front, minval, maxval) {
 }
 
 ##
-## Epsilon Indicator:
+## Hypervolume indicator:
+##
+hypervolume_indicator <- function(x, o, ref) {
+  if (missing(ref))
+    ref <- pmax(apply(x, 1, max), apply(o, 1, max))
+
+  hvx <- dominated_hypervolume(x, ref)
+  hvo <- dominated_hypervolume(o, ref)
+  return(hvo - hvx)
+}
+
+##
+## Epsilon indicator:
 ##
 epsilon_indicator <- function(x, o) {
   stopifnot(is.matrix(x))
@@ -31,9 +43,9 @@ epsilon_indicator <- function(x, o) {
 }
 
 ##
-## R Indicators:
-###
-r_indicator <- function(x, ref, ideal, nadir, lambda, utility, summary) {
+## R indicators:
+##
+r_indicator <- function(x, o, ideal, nadir, lambda, utility, summary) {
   ## (OME): Order of utility functions is important. It translates
   ## into the method number in the C code!
   utility.functions <- c("weighted sum", "Tchebycheff", "Augmented Tchebycheff")
@@ -41,9 +53,9 @@ r_indicator <- function(x, ref, ideal, nadir, lambda, utility, summary) {
   method <- which(utility == utility.functions)
   
   if (missing(ideal)) 
-    ideal <- pmin(apply(x, 1, min), apply(ref, 1, min))
+    ideal <- pmin(apply(x, 1, min), apply(o, 1, min))
   if (missing(nadir))
-    nadir <- pmax(apply(x, 1, max), apply(ref, 1, max))
+    nadir <- pmax(apply(x, 1, max), apply(o, 1, max))
 
   dim <- nrow(x)
   if (missing(lambda)) {
@@ -55,16 +67,16 @@ r_indicator <- function(x, ref, ideal, nadir, lambda, utility, summary) {
   }
   
   ix <- .Call("do_r_ind", x, ideal, nadir, as.integer(lambda), as.integer(method))
-  ir <- .Call("do_r_ind", ref, ideal, nadir, as.integer(lambda), as.integer(method))
+  io <- .Call("do_r_ind", o, ideal, nadir, as.integer(lambda), as.integer(method))
   
-  return(summary(ix, ir))
+  return(summary(ix, io))
 }
 
-r1_indicator <- function(x, ref, ideal, nadir, lambda, utility="Tchebycheff")
-  r_indicator(x, ref, ideal, nadir, lambda, utility, function(ua, ur) mean(ua > ur) + mean(ua == ur)/2)
+r1_indicator <- function(x, o, ideal, nadir, lambda, utility="Tchebycheff")
+  r_indicator(x, o, ideal, nadir, lambda, utility, function(ua, ur) mean(ua > ur) + mean(ua == ur)/2)
 
-r2_indicator <- function(x, ref, ideal, nadir, lambda, utility="Tchebycheff") 
-    r_indicator(x, ref, ideal, nadir, lambda, utility, function(ua, ur) mean(ur - ua))
+r2_indicator <- function(x, o, ideal, nadir, lambda, utility="Tchebycheff") 
+    r_indicator(x, o, ideal, nadir, lambda, utility, function(ua, ur) mean(ur - ua))
 
-r3_indicator <- function(x, ref, ideal, nadir, lambda, utility="Tchebycheff") 
-    r_indicator(x, ref, ideal, nadir, lambda, utility, function(ua, ur) mean((ur - ua)/ur))
+r3_indicator <- function(x, o, ideal, nadir, lambda, utility="Tchebycheff") 
+    r_indicator(x, o, ideal, nadir, lambda, utility, function(ua, ur) mean((ur - ua)/ur))

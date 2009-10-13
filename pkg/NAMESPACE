@@ -13,7 +13,8 @@ export(nds_rank)
 export(nondominated_points)
 export(nondominated_ordering)
 
-## pareto_utilities.r:
+## indicators.r
+export(hypervolume_indicator)
 export(epsilon_indicator)
 export(r1_indicator)
 export(r2_indicator)
