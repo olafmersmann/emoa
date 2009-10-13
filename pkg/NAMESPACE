@@ -6,9 +6,14 @@ export(UF1, UF2, UF3, UF4, UF5, UF6, UF7, UF8, UF9, UF10)
 ## sympart.r:
 export(sympart)
 
-## pareto_utilities.r:
+## domination.R:
+export(is_dominated)
+export(`%dominates%`)
+export(nds_rank)
 export(nondominated_points)
 export(nondominated_ordering)
+
+## pareto_utilities.r:
 export(epsilon_indicator)
 export(r1_indicator)
 export(r2_indicator)

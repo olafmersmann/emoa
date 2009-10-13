@@ -1,5 +1,5 @@
 /*
- * pareto_utilities.c - utility functions relating to pareto dominance
+ * domination.c - utility functions relating to pareto dominance
  *
  * Most of these functions could just as well have been implemented in
  * R but were deemed performance critical enough to warrant rewriting
@@ -56,52 +56,51 @@ static R_INLINE int dominates(double *p, R_len_t i, R_len_t j, R_len_t nobj) {
 }
 
 /*
- * nondominated_points
+ * is_dominated
  *
- * Returns a logical vector whose lenght corresponds to the number of
- * rows in the matrix contained in 's_points'. An entry is true if the
- * point defined by the corresponding row in 's_points' is not dominated
- * by any point other point in 's_points'.
+ * Returns a logical vector whose length corresponds to the number of
+ * columns contained in the matrix s_points. TRUE means the point is
+ * dominated by some other point in s_points.
  */
-SEXP nondominated_points(SEXP s_points) {
+SEXP is_dominated(SEXP s_points) {
     SEXP s_res;
     R_len_t i, j;
     
-    /* Check argument: */
-    if (!isReal(s_points) || !isMatrix(s_points)) 
-	error("Argument 's_points' is not a real matrix.");
-    UNPACK_REAL_MATRIX(s_points, points, d, n); /* Note column layout */
+    /* Unpack arguments:
+     * Note how we turn the nxd R matrix (which is stored in column major
+     * order) into a dxn C matrix where all individuals are stored
+     * consecutivly instead of interleaved.
+     */
+    UNPACK_REAL_MATRIX(s_points, points, d, n);
     
     /* Allocate result vector: 
      *
-     * res[i] == TRUE  <=> i-th point is not dominated
-     * res[i] == FALSE <=> i-th point is dominated
+     * res[i] == TRUE  <=> i-th point is dominated
+     * res[i] == FALSE <=> i-th point is nondominated
      */
     PROTECT(s_res = allocVector(LGLSXP, n));
     int *res = LOGICAL(s_res);
     
     /* Initialy all points are not dominated: */
     for (i = 0; i < n; ++i) 
-	res[i] = TRUE;
+	res[i] = FALSE;
     
     for (i = 0; i < n; ++i) {
-        /* Point is not dominated: */
-	if (res[i]) { 
-	    for (j = (i+1); j < n; ++j) {
-                /* Point j is also not dominated: */
-		if (res[j]) { 
-		    int dom = dominates(points, i, j, d);
-		    if (dom > 0) { /* i dominates j */
-			res[j] = FALSE;
-		    } else if (dom < 0) { /* j dominates i */
-			res[i] = FALSE;
-		    }
-		}
+	if (res[i]) 
+	    continue; /* Point is dominated, skip */
+	for (j = (i+1); j < n; ++j) {
+	    if (res[j]) 
+		continue; /* Point is dominated, skip */
+	    int dom = dominates(points, i, j, d);
+	    if (dom > 0) { /* i dominates j */
+		res[j] = TRUE;
+	    } else if (dom < 0) { /* j dominates i */
+		res[i] = TRUE;
 	    }
 	}
     }
     UNPROTECT(1); /* s_res */
-    return s_res;
+    return s_res;    
 }
 
 /*

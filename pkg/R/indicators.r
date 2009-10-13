@@ -14,27 +14,6 @@ normalize_points <- function(front, minval, maxval) {
   (front - minval)/(maxval - minval)
 }
 
-nondominated_points <- function(par) {
-  stopifnot(is.matrix(par))
-  stopifnot(is.numeric(par))
-  
-  .Call("nondominated_points", par)
-}
-
-nondominated_ordering <- function(par, partial) {
-  stopifnot(is.matrix(par))
-  stopifnot(is.numeric(par))
-  
-  if (missing(partial))
-    partial <- ncol(par)
-  else if (is.numeric(partial))
-    partial <- as.integer(partial)
-  else
-    stopifnot(is.integer(partial))
-  
-  .Call("nondominated_order", par, partial)
-}
-
 ##
 ## Epsilon Indicator:
 ##
