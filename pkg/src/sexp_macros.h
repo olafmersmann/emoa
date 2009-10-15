@@ -17,15 +17,15 @@
 
 #define CHECK_ARG_IS_REAL_MATRIX(A)					\
     if (!isReal(A) || !isMatrix(A))					\
-	error("Argument '##A' is not a real matrix.");
+	error("Argument '" #A "' is not a real matrix.");
 
 #define CHECK_ARG_IS_REAL_VECTOR(A)					\
     if (!isReal(A) || !isVector(A))					\
-	error("Argument '##A' is not a real matrix.");
+	error("Argument '" #A "' is not a real vector.");
 
 #define CHECK_ARG_IS_INT_VECTOR(A)					\
     if (!isInteger(A) || !isVector(A))					\
-	error("Argument '##A' is not a real matrix.");
+	error("Argument '" #A "' is not an integer vector.");
 
 /*
  * Unpack a real matrix stored in SEXP S. 
