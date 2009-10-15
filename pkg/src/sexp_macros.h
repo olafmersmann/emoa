@@ -48,8 +48,8 @@
  * Unpack a single real stored in SEXP S.
  */
 #define UNPACK_REAL(S, D)			\
-    CHECK_ARG_IS_INT_VECTOR(S);			\
-    double D = INTEGER(S)[0];			\
+    CHECK_ARG_IS_REAL_VECTOR(S);		\
+    double D = REAL(S)[0];			\
 
 /*
  * Unpack an integer vector stored in SEXP S.
