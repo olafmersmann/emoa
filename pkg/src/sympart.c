@@ -52,8 +52,6 @@ SEXP do_sympart(SEXP s_x) {
     const double si = sin(omega);
     const double co = cos(omega);
 
-    if (!isReal(s_x) || !isVector(s_x))
-	error("Argument 's_x' is not a numeric vector.");
     UNPACK_REAL_VECTOR(s_x, x, n);
 
     /* Allocate return vector */
