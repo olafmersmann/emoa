@@ -6,7 +6,7 @@
 ##
 
 N <- 10000L
-f <- poly_mutation(5, 0.8, -10, 10)
+f <- pm_operator(5, 0.8, -10, 10)
 x <- replicate(N, f(5))
 
 test.polyP1 <- function() {

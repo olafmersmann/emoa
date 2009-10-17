@@ -37,7 +37,7 @@ nds_rank <- function(points, partial) {
   .Call("nondominated_order", points, partial)
 }
 
-nondominated_ordering <- function(par, partial) {
+nondominated_ordering <- function(points, partial) {
   .Deprecated("nds_rank")
   nds_rank(par, partial)
 }

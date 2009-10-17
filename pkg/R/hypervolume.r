@@ -48,4 +48,3 @@ hypervolume_contribution <- function(x, ref) {
   ## Call C code:
   .Call("do_hv_contrib", x, ref)
 }
-

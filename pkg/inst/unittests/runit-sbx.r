@@ -6,19 +6,15 @@
 ##
 
 N <- 10000L
-f <- sbx_crossover(2, 0.8, -2, 2)
-x <- replicate(N, f(0, 1)[[1L]])
+f <- sbx_operator(2, 0.8, -2, 2)
+parents <- matrix(c(0, 1), ncol=2)
+print(parents)
+x <- t(replicate(N, f(parents)))[,1]
 
 test.sbxP1 <- function() {
   p <- mean(x != 0)
   message("P1 = ", p)
   checkTrue(p > 0.78 && p < 0.82)
-}
-
-test.sbxP2 <- function() {
-  p <- mean(x < 0)
-  message("P2 = ", p)
-  checkTrue(p > 0.38 && p < 0.42)
 }
 
 test.sbxInBounds <- function() {
