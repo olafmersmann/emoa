@@ -5,5 +5,11 @@ VHEAD=$(echo $VERSION | cut -d- -f1)
 VTAIL=$(echo $VERSION | cut -d- -f2)
 VNUM=$(expr $VTAIL + 1)
 NVERSION=$VHEAD-$VNUM
+VTAG=$(echo $NVERSION | cut -d\  -f2)
 
+git stash save -q
 perl -i.bak -p -e "s/$VERSION/$NVERSION/ig" pkg/DESCRIPTION
+git add pkg/DESCRIPTION
+git ci -m "Bump version to $VTAG."
+git tag "v$VTAG"
+git stash pop -q
