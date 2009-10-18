@@ -21,6 +21,7 @@ clean:
 	rm -fR pkg/src/*.o pkg/src/*.so pkg.Rcheck .RData .Rhistory
 
 pkg: clean data
+	./bump-version
 	echo "Date: $(date +%Y-%m-%d)" >> pkg/DESCRIPTION
 	git log --no-merges -M --date=iso --format=medium pkg/ > pkg/ChangeLog
 	R CMD build pkg

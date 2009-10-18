@@ -1,0 +1,9 @@
+#!/bin/bash
+
+VERSION=$(grep Version: pkg/DESCRIPTION)
+VHEAD=$(echo $VERSION | cut -d- -f1)
+VTAIL=$(echo $VERSION | cut -d- -f2)
+VNUM=$(expr $VTAIL + 1)
+NVERSION=$VHEAD-$VNUM
+
+perl -i.bak -p -e "s/$VERSION/$NVERSION/ig" pkg/DESCRIPTION
