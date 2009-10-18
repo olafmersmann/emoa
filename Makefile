@@ -22,9 +22,11 @@ clean:
 
 pkg: clean data
 	./bump-version
+	git stash save -q
 	echo "Date: $(date +%Y-%m-%d)" >> pkg/DESCRIPTION
 	git log --no-merges -M --date=iso --format=medium pkg/ > pkg/ChangeLog
 	R CMD build pkg
 	R CMD build --binary pkg
-	git checkout pkg/DESCRIPTION
+	git checkout DESCRIPTION
+	git stash pop -q
 	rm -f pkg/ChangeLog
