@@ -5,7 +5,7 @@
  * R but were deemed performance critical enough to warrant rewriting
  * them in C.
  *
- * NOTICE: These functions expect the points to be passed in in column
+ * NOTICE: These functions expect the points to be passed in column
  * major order. That means, we expect each column of the matrix to be
  * one point and each row to be one coordinate. This may seem counter
  * intuitive from an R standpoint but makes all C code more cache
@@ -137,7 +137,6 @@ SEXP nondominated_order(SEXP s_points, SEXP s_tosort) {
      * individuals that dominate the i-th individual.
      */
     for (i = 0; i < n; ++i) {
-	S[i].string = NULL;
 	bitstring_initialize(&S[i], n);
 	N[i] = 0;
     }
