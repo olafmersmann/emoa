@@ -14,6 +14,6 @@ pm_operator <- function(n, p, lower, upper) {
   force(n); force(p); force(lower); force(upper);
 
   mutation <- function(x)
-    .Call("do_pm", x, lower, upper, n, p)
+    .Call("do_pm", x, lower, upper, n, p, PACKAGE="emoa")
   return(mutation)
 }

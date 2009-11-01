@@ -25,7 +25,7 @@ dominated_hypervolume <- function(x, ref, algorithm) {
     stop("Reference point and front must have the same dimension.")
 
   if (algorithm == "fonseca") {
-    .Call("do_fonseca_hv", x, ref)
+    .Call("do_fonseca_hv", x, ref, PACKAGE="emoa")
   } else {
     stop("Unsupported algorithm '", algorithm, "'.")
   }
@@ -46,5 +46,5 @@ hypervolume_contribution <- function(x, ref) {
     stop("Reference point and front must have the same dimension.")
 
   ## Call C code:
-  .Call("do_hv_contrib", x, ref)
+  .Call("do_hv_contrib", x, ref, PACKAGE="emoa")
 }
