@@ -24,8 +24,16 @@ export(r3_indicator)
 export(dominated_hypervolume)
 export(hypervolume_contribution)
 
+## crowding_distance.r
+export(crowding_distance)
+
 ## sb_crossover.r
 export(sbx_operator)
 
 ## poly_mutation.r
 export(pm_operator)
+
+## selection.r
+export(nds_hv_selection)
+export(nds_cd_selection)
+
