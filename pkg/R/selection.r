@@ -6,6 +6,23 @@
 ##   selection(values, n, ...)
 ##
 
+##' Selection strategies for EMOA.
+##'
+##' The currently implemented strategies are nondominated sorting
+##' followed by either hypervolume contribution or crowding distance
+##' based ranking. Both of these implementations are currently
+##' limited to selecting a single individual for replacement.
+##'
+##' @param values Matrix of function values.
+##' @param n      Number of individuals to select for replacement.
+##' @param ...    optimal parameters.
+##' 
+##' @title Selection strategies
+##' @aliases nds_hv_selection nds_cd_selection
+##'
+##' @author Olaf Mersmann \email{olafm@@statistik.tu-dortmund.de}
+##' @keywords optimize nonlinear
+##' @export
 nds_hv_selection <- function(values, n=1, ...) {
   #stopifnot(n == 1)
   ranks <- nds_rank(values)
@@ -20,6 +37,8 @@ nds_hv_selection <- function(values, n=1, ...) {
   }
 }
 
+##' @export
+##' @rdname nds_hv_selection
 nds_cd_selection <- function(values, n=1, ...) {
   #stopifnot(n == 1)
   ranks <- nds_rank(values)

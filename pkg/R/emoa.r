@@ -1,0 +1,2 @@
+##' @useDynLib emoa
+ls()
