@@ -1,5 +1,5 @@
 .SILENT:
-.PHONEY: clean test check build install pkg data
+.PHONEY: clean test check build install pkg data roxygen
 
 install: clean data
 	echo "Installing package..."
@@ -15,24 +15,28 @@ check: clean data
 
 data: pkg/data/cec2007.rda
 
+pkg: skel
+	echo "Roxygenizing package..."
+	./roxygenize > roxygen.log 2>&1
+
+pkg/data: pkg
+	mkdir pkg/data
+
 pkg/data/cec2007.rda: data/cec2007/convert.r $(ls data/cec2007/*.txt) pkg/data
 	echo "Creating CEC2007 dataset..."
 	(cd data/cec2007/ ; Rscript convert.r)
 
-pkg/data:
-	mkdir pkg/data
-
 clean:
 	echo "Cleaning up..."
-	rm -fR pkg/src/*.o pkg/src/*.so pkg.Rcheck .RData .Rhistory build.log install.log
+	rm -fR skel/src/*.o skel/src/*.so skel.Rcheck
+	rm -fR pkg
+	rm -fR .RData .Rhistory build.log install.log roxygen.log
 
-pkg: clean data
+package: clean data
 	echo "Building package..."
 	-git stash save -q
-	./bump-version
 	echo "Date: $(date +%Y-%m-%d)" >> pkg/DESCRIPTION
 	git log --no-merges -M --date=iso --format=medium pkg/ > pkg/ChangeLog
 	R CMD build pkg > build.log 2>&1
-	git checkout pkg/DESCRIPTION
 	-git stash pop -q
 	rm -f pkg/ChangeLog

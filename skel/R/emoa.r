@@ -1,2 +1,2 @@
 ##' @useDynLib emoa
-ls()
+NULL
