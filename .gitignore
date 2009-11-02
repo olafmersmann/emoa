@@ -1,4 +1,8 @@
 *~
 *.o
 *.so
-pkg/src/Makevars
+skel/src/Makevars
+pkg/
+roxygen.log
+build.log
+install.log
