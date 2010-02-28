@@ -19,8 +19,7 @@
 /* 
  * Helper functions:
  */
-
-R_INLINE int ipow(const int x, const int exp) {
+static R_INLINE int ipow(const int x, const int exp) {
     int val = 1;
     for (int i = 0; i < exp; ++i)
         val *= x;
@@ -30,7 +29,7 @@ R_INLINE int ipow(const int x, const int exp) {
 /*
  * Utility functions:
  */
-double weighted_sum_utility(const double *wv, const double *x, 
+static double weighted_sum_utility(const double *wv, const double *x, 
 			    const double *ideal, const double *nadir,
 			    const size_t nobjs) {
     int i;
@@ -42,7 +41,7 @@ double weighted_sum_utility(const double *wv, const double *x,
     return (1.0 - total);
 }
 
-double tchebycheff_utility(const double *wv, const double *x, 
+static double tchebycheff_utility(const double *wv, const double *x, 
 			   const double *ideal, const double *nadir,
 			   const size_t nobjs) {
     int i;
@@ -56,7 +55,7 @@ double tchebycheff_utility(const double *wv, const double *x,
     return (1.0 - mymax);
 }
 
-double augmented_tchebycheff_utility(const double *wv, const double *x, 
+static double augmented_tchebycheff_utility(const double *wv, const double *x, 
 				     const double *ideal, const double *nadir, 
 				     const size_t nobjs,
 				     const double rho) {
@@ -67,7 +66,7 @@ double augmented_tchebycheff_utility(const double *wv, const double *x,
 }
 
 
-void int2kary(int x, const int basek, const int digits, int *kary) {
+static void int2kary(int x, const int basek, const int digits, int *kary) {
     int i;
     int val;
     if (x >= ipow(basek,digits)) {
@@ -94,7 +93,7 @@ void int2kary(int x, const int basek, const int digits, int *kary) {
 /* 
  * create_weight_vectors - sample from all possible weight vectors
  */
-double *create_weight_vectors(const int s, const int k, int *pnwv) {
+static double *create_weight_vectors(const int s, const int k, int *pnwv) {
     int c=0;
     size_t nwv = (int) choose(s+k-1, k-1);
     double *wv = (double *)R_alloc(nwv*k, sizeof(double));
