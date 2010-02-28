@@ -6,13 +6,13 @@
 ##
 
 ##' Dominated Hypervolume calculation
-##'
+##' 
 ##' \code{dominated_hypervolume} calculates the dominated hypervolume of
 ##' the points in \code{points}. 
-##'
+##' 
 ##' \code{hypervolume_contribution} calculates the hypervolume
 ##' contribution of each point.
-##'
+##' 
 ##' If no reference point \code{ref} is given, one is automatically
 ##' calculated by determening the maximum in each coordinate.
 ##'  
@@ -22,8 +22,8 @@
 ##'  
 ##' The 1D and 2D cases are handle seperately by efficient algorithms.
 ##' Calculates the exact dominated hypervolume of the points given in
-##'  \code{x} subject to the reference point \code{ref}.
-##'
+##' \code{x} subject to the reference point \code{ref}.
+##' 
 ##' @param points Matrix containing the points one per column.
 ##' @param ref Optional reference point. If not provided the maximum
 ##'   in each dimension is used.
@@ -34,12 +34,12 @@
 ##'   by the points in \code{points} with respect to the reference point
 ##'   \code{ref}. For \code{hypervolume_contribution} a vector giving
 ##'   the hypervolume soley dominated by that point.
-##'
+##' 
 ##' @seealso \code{\link{nondominated_points}} to extract the pareto
 ##'   optimal points for a given set of points and
 ##'   \code{\link{nds_hv_selection}} for a selection strategy based
 ##'   on the hypervolume contribution of each point.
-##'
+##' 
 ##' @author Olaf Mersmann \email{olafm@@statistik.tu-dortmund.de}
 ##' @export
 ##' @keywords optimize
