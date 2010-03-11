@@ -39,16 +39,27 @@ nds_hv_selection <- function(values, n=1, ...) {
 
 ##' @export
 ##' @rdname nds_hv_selection
+##' @param values - matrix of individuals, one per column
+##' @param n - number of individuals to select for elimination
+##' @param ... - ignored
 nds_cd_selection <- function(values, n=1, ...) {
   #stopifnot(n == 1)
+  N <- ncol(values)
+  k <- N - n
   ranks <- nds_rank(values)
-  bad <- max(ranks)
-  sel  <- which(ranks == bad)
-  ## Identify individual which gets replaced:
-  if (length(sel) == 1) {
-    return(sel)
-  } else {
-    dist <- crowding_distance(values[,ranks==bad])
-    return(sel[which.min(dist)])
+  sel <- rep(FALSE, N)
+  cr <- 0
+  while(sum(sel) < k) {
+    cr <- cr + 1
+    sel[ranks == cr] <- TRUE
   }
+
+  if (sum(sel) != k) {
+    nelim <- sum(sel) - k
+    dist <- crowding_distance(values[,ranks == cr])
+    cdr <- rank(dist, ties.method="random")
+    s <- which(ranks == cr)[cdr <= nelim]
+    sel[s] <- FALSE
+  }
+  which(sel == FALSE)
 }
