@@ -1,99 +1,82 @@
 ##
-## sms_emoa.r - Simple straight forward SMS-EMOA implementation
+## sms_emoa.r - Straight forward SMS-EMOA implementation
 ##
 ## Author:
 ##  Olaf Mersmann (OME) <olafm@statistik.tu-dortmund.de>
 ##
 
+require(mco)
 require(emoa)
 
-coalesce <- emoa:::coalesce
-
 sms_emoa <- function(f, lower, upper, ...,
-                     control=list(
-                       n=NULL,
-                       d=NULL,
-                       mu=100L,
-                       maxeval=NULL,
-                       nc=15, pc=0.7,
-                       nm=25, pm=0.3,
-                       ref=c(11, 11),
-                       trace=FALSE
+                     control=list(mu=100L,
+                       sbx.n=15, sbx.p=0.7,
+                       pm.n=25, pm.p=0.3
                        )) {
-  ## f:R^n -> R^d:
-  n <- as.integer(coalesce(control[["n"]], max(length(lower), length(upper))))
-  d <- as.integer(coalesce(control[["d"]], length(f(rep(NA, n)))))
+  ## Extract control parameters:
+  default <- formals(sys.function())$control
+  control <- steady_state_emoa_control(f, lower, upper, ..., control=control, default=default)
+  control <- sbx_control(f, upper, lower, ..., control=control, default=default)
+  control <- pm_control(f, upper, lower, ..., control=control, default=default)  
+  control$ref <- emoa:::coalesce(control[["ref"]], rep(11, control$d))  
 
-  ## Population size:
-  mu <- as.integer(coalesce(control[["mu"]], 100L))
-
-  ## Stopping Criterion:
-  maxeval <- as.integer(coalesce(control[["maxeval"]], mu*300L))
-  
-  ## Crossover parameters:
-  nc <- coalesce(control[["nc"]], 5)
-  pc <- coalesce(control[["pc"]], 1.0)
-  crossover <- sbx_operator(nc, pc, lower, upper)
-
-  ## Mutation parameters:
-  nm <- coalesce(control[["nm"]], 10)
-  pm <- coalesce(control[["pm"]], .2)
-  mutation <- pm_operator(nm, pm, lower, upper)
-
-  ## Tracing:
-  trace <- coalesce(control[["trace"]], 100L)
-  trace <- ifelse(trace == TRUE, 100L, as.integer(trace))
-  ref <- coalesce(control[["ref"]], rep(11, d))
-  
   ## Tracking variables:
-  X <- matrix(0, nrow=n, ncol=maxeval)
-  Y <- matrix(0, nrow=d, ncol=maxeval)
-  eol <- rep(-1L, maxeval)
+  X <- matrix(0, nrow=control$n, ncol=control$maxeval)
+  Y <- matrix(0, nrow=control$d, ncol=control$maxeval)
+  dob <- rep(-1L, control$maxeval)
+  eol <- rep(-1L, control$maxeval)
   
-  ## Inital population:  
-  X[, 1:mu] <- replicate(mu, runif(n, lower, upper))
-  Y[, 1:mu] <- sapply(1:mu, function(i) f(X[,i]))
+  ## Random inital population:
+  X[, 1:control$mu] <- replicate(control$mu, runif(control$n, lower, upper))
+  Y[, 1:control$mu] <- sapply(1:control$mu, function(i) f(X[,i]))
 
-  neval <- mu       ## Count the number of function evaluations
-  active <- 1:mu    ## Indices of individuals that are in the current pop.
+  neval <- control$mu       ## Count the number of function evaluations
+  active <- 1:control$mu    ## Indices of individuals that are in the current pop.
 
-  if (trace) message(sprintf("%8s %8s", "NEVAL", "HV"))
-
+  ## Save some common control parameters into the current
+  ## environment. This saves a few msec of execution time...
+  crossover <- control$crossover
+  mutate <- control$mutate
+  maxeval <- control$maxeval
+  logger <- control$logger
+  
+  logger$start("sms_emoa")
   while(neval < maxeval) {
     ############################################################
     ## Variation:
     parents <- sample(active, 2)
-    ## child <- .Call("do_sbx", X[, parents], lower, upper, nc, pc)[,sample(c(1,2), 1)]
     child <- crossover(X[, parents])[,sample(c(1, 2), 1)]
-    x <- mutation(child)
+    x <- mutate(child)
 
     ## Add new individual:
     neval <- neval + 1
     X[, neval] <- x
     Y[, neval] <- f(x)
+    dob[neval] <- neval ## For a steady state emoa this is trivial...
     active <- c(active, neval)
 
     ############################################################
     ## Selection:
-    i <- nds_hv_selection(Y[,active])
+    i <- nds_hv_selection(Y[, active])
 
     ## Remove the i-th active individual:
     eol[active[i]] <- neval
     active <- active[-i]
 
     ############################################################
-    ## Reporting:
-    if (trace && neval %% trace == 0)
-      message(sprintf("%8i %8.4f", neval, dominated_hypervolume(Y[,active], ref)))
+    ## Logging:    
+    logger$step()
   }
-  return(list(X=X, Y=Y, eol=eol, par=X[,active], value=Y[,active]))
+  logger$stop()
+  
+  res <- structure(list(X=X, Y=Y, eol=eol,
+                        par=X[,active], value=Y[,active]),
+                   class="emoa_result")
+  return(res)
 }
 
-fun <- zdt1
-control <- list(mu=100L,
-                trace=FALSE,
-                maxeval=30000L
-                )
+fun <- zdt3
+control <- list(mu=100L, maxeval=20000L,
+                logger=emoa_console_logger(100L))
 
 res <- sms_emoa(fun, rep(0, 30), rep(1, 30), control=control)
-pf.approx <- nondominated_points(res$Y)
