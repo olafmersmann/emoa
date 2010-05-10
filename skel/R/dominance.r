@@ -27,15 +27,6 @@ is_dominated <- function(points) {
   .Call("is_dominated", points, PACKAGE="emoa")
 }
 
-`%dominates%` <- function(x, y) {
-  #stopifnot(is.vector(x))
-  #stopifnot(is.vector(y))
-  
-  n1 <- sum(x < y)
-  n2 <- sum(y > x)
-  n1 > 0 & n2 == 0
-}
-
 ##' Nondominated points
 ##'
 ##' Return those points which are not dominated by another point in
