@@ -20,6 +20,9 @@
 ##' 
 ##' @export
 emoa_logger <- function(output, every=10L) {
+  force(output)
+  force(every)
+  
   alg <- NULL
   start_time <- NULL
   
@@ -35,7 +38,7 @@ emoa_logger <- function(output, every=10L) {
 
   logger_step <- function(env=parent.frame()) {
     if (env$neval %% every == 0)
-      trace_msg("%8i %8.4f", env$neval, dominated_hypervolume(env$Y[, env$active], env$ref))
+      trace_msg("%8i %8.4f", env$neval, dominated_hypervolume(env$Y[, env$active], env$control$ref))
   }
 
   logger_stop <- function(env=parent.frame()) {
