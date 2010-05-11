@@ -42,12 +42,13 @@
 ##' \url{http://iridia.ulb.ac.be/~manuel/hypervolume}. For a
 ##' description of the used algorithm see
 ##'
-##' Carlos M. Fonseca, Luís Paquete, and Manuel López-Ibáñez. \emph{An
+##' Carlos M. Fonseca, Luis Paquete, and Manuel Lopez-Ibanez. \emph{An
 ##' improved dimension-sweep algorithm for the hypervolume
 ##' indicator}. In IEEE Congress on Evolutionary Computation, pages
 ##' 1157-1163, Vancouver, Canada, July 2006.
 ##' 
 ##' @author Olaf Mersmann \email{olafm@@statistik.tu-dortmund.de}
+##' 
 ##' @export
 ##' @keywords optimize
 dominated_hypervolume <- function(points, ref) {
