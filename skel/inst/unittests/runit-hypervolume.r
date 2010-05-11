@@ -37,7 +37,7 @@ test.infFront <- function() {
   ## OME: These should probably be reworked to return 'saner' values.
   checkEquals(dominated_hypervolume(infFront), NaN)
   checkEquals(dominated_hypervolume(infFront, ref=c(1, 1)), NaN)
-  checkEquals(dominated_hypervolume(simpleFront, ref=c(Inf, Inf)), Inf)
+  checkEquals(dominated_hypervolume(simpleFront, ref=c(Inf, Inf)), NaN)
 }
 
 test.badInput <- function() {
