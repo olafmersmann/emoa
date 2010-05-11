@@ -1,8 +1,8 @@
 Package: emoa
-Version: 0.1-3
+Version: 0.1-4
 Title: Evolutionary Multiobjective Optimization Algorithms
-Description: Package containing functions to design and analyze
-  evolutionary multiobjective optimization algorithms.
+Description: Collection of building blocks for the design and analysis
+  of evolutionary multiobjective optimization algorithms.
 Author: Olaf Mersmann <olafm@statistik.tu-dortmund.de>
 Maintainer: Olaf Mersmann <olafm@statistik.tu-dortmund.de>
 License: GPL-2
