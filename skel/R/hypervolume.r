@@ -33,9 +33,19 @@
 ##'   the hypervolume soley dominated by that point.
 ##' 
 ##' @seealso \code{\link{nondominated_points}} to extract the pareto
-##'   optimal points for a given set of points and
-##'   \code{\link{nds_hv_selection}} for a selection strategy based
-##'   on the hypervolume contribution of each point.
+##' front approximation from a given set of points and
+##' \code{\link{nds_hv_selection}} for a selection strategy based on
+##' the hypervolume contribution of each point.
+##'
+##' @references
+##' This code uses the Fonseca et.al. code from
+##' \url{http://iridia.ulb.ac.be/~manuel/hypervolume}. For a
+##' description of the used algorithm see
+##'
+##' Carlos M. Fonseca, Luís Paquete, and Manuel López-Ibáñez. \emph{An
+##' improved dimension-sweep algorithm for the hypervolume
+##' indicator}. In IEEE Congress on Evolutionary Computation, pages
+##' 1157-1163, Vancouver, Canada, July 2006.
 ##' 
 ##' @author Olaf Mersmann \email{olafm@@statistik.tu-dortmund.de}
 ##' @export
