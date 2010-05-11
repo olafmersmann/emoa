@@ -27,9 +27,6 @@
 ##' @param points Matrix containing the points one per column.
 ##' @param ref Optional reference point. If not provided the maximum
 ##'   in each dimension is used.
-##' @param algorithm Optional argument to choose the algorithm used for
-##'   the calculation. Currently only the code by Fonseca et.al. is
-##'   supported.
 ##' @return For \code{dominated_hypervolume} the dominated hypervolume
 ##'   by the points in \code{points} with respect to the reference point
 ##'   \code{ref}. For \code{hypervolume_contribution} a vector giving
@@ -43,25 +40,26 @@
 ##' @author Olaf Mersmann \email{olafm@@statistik.tu-dortmund.de}
 ##' @export
 ##' @keywords optimize
-dominated_hypervolume <- function(points, ref, algorithm) {
+dominated_hypervolume <- function(points, ref) {
   ## Possibly infer reference point:
   if (missing(ref))
     ref <- apply(points, 1, max)
-  ## Pick an algorithm:
-  if (missing(algorithm))
-    algorithm <- "fonseca"
 
   ## Sanity checks:
   if (!is.matrix(points))
     stop("Pareto front must be a matrix")
   if (nrow(points) != length(ref))
     stop("Reference point and front must have the same dimension.")
-
-  if (algorithm == "fonseca") {
-    .Call("do_fonseca_hv", points, ref, PACKAGE="emoa")
-  } else {
-    stop("Unsupported algorithm '", algorithm, "'.")
+  if (!all(is.finite(ref))) {
+    warning("Reference point containes non finite values.")
+    return(NaN)
   }
+  if (!all(is.finite(points))) {
+    warning("Front includes non finite points.")
+    return(NaN)
+  }
+  
+  .Call("do_dominated_hypervolume", points, ref, PACKAGE="emoa")
 }
 
 ##' @export

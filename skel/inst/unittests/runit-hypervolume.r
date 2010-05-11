@@ -22,8 +22,8 @@ test.dominated_hypervolume <- function() {
   ## OME: FIXME should ignore outer points?
   ## checkEqualsNumeric(dominated_hypervolume(simpleFront, c(0.8, 0.8)), 0.3^2)
   checkEqualsNumeric(dominated_hypervolume(simpleFront, c(2.0, 2.0)), 3.25)
-  checkEqualsNumeric(dominated_hypervolume(simpleFront, c(0.0, 0.0)), -0.75)
-  checkEqualsNumeric(dominated_hypervolume(simpleFront, c(0.5, 0.5)), -0.50)
+  checkEqualsNumeric(dominated_hypervolume(simpleFront, c(0.0, 0.0)), 0)
+  checkEqualsNumeric(dominated_hypervolume(simpleFront, c(0.5, 0.5)), 0)
   checkEqualsNumeric(dominated_hypervolume(simpleFront, c(NaN, NaN)), NaN)
 }
 
