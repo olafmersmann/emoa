@@ -37,7 +37,7 @@ normalize_points <- function(points, minval, maxval) {
 ##' @param points Matrix of points for which to calculate the indicator
 ##'   value stored one per column.
 ##' @param o Matrix of points of the reference set.
-##' @param ref eference point, if omitted, the nadir of the point sets
+##' @param ref Reference point, if omitted, the nadir of the point sets
 ##'   is used.
 ##' @param ideal Ideal point of true Pareto front. If omited the ideal
 ##'   of both point sets is used.
