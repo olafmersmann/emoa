@@ -1,5 +1,7 @@
+GITVERSION := $(shell sh -c ./gitversion)
+
 .SILENT:
-.PHONEY: clean test check build install pkg data roxygen usage help
+.PHONEY: clean test check build install package data usage help
 
 usage:
 	echo "Available targets:"
@@ -29,17 +31,6 @@ check: clean data
 
 data: pkg/data/cec2007.rda
 
-pkg:
-	echo "Roxygenizing package..."
-	./roxygenize > roxygen.log 2>&1
-
-pkg/data: pkg
-	mkdir pkg/data
-
-pkg/data/cec2007.rda: data/cec2007/convert.r $(ls data/cec2007/*.txt) pkg/data
-	echo "Creating CEC2007 dataset..."
-	(cd data/cec2007/ ; Rscript convert.r)
-
 clean:
 	echo "Cleaning up..."
 	rm -fR skel/src/*.o skel/src/*.so skel.Rcheck
@@ -54,3 +45,16 @@ package: clean data
 	R CMD build pkg > build.log 2>&1
 	-git stash pop -q
 	rm -f pkg/ChangeLog
+
+pkg:
+	echo "Updating 'Version' field..."
+	sed -i -e "s/^Version: UNKNOWN/Version: ${GITVERSION}/g" skel/DESCRIPTION
+	echo "Roxygenizing package..."
+	./roxygenize > roxygen.log 2>&1
+	sed -i -e "s/^Version:.*/Version: UNKNOWN/g" skel/DESCRIPTION
+pkg/data: pkg
+	mkdir pkg/data
+
+pkg/data/cec2007.rda: pkg/data data/cec2007/convert.r $(ls data/cec2007/*.txt)
+	echo "Creating CEC2007 dataset..."
+	(cd data/cec2007/ ; Rscript convert.r)

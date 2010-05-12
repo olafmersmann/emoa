@@ -1,0 +1,10 @@
+#!/bin/bash
+
+DESC=$(git describe --dirty --long | sed -e 's/^v//' | tr '.-' ' ')
+read MAJOR MINOR REVISION DESC DIRT <<< $DESC
+
+if [[ $DIRT = "dirty" ]] ; then
+    echo "$MAJOR.$MINOR-$(date '+%s')"
+else
+    echo "$MAJOR.$MINOR-$REVISION"
+fi
