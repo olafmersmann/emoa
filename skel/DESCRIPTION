@@ -1,5 +1,4 @@
 Package: emoa
-Version: 0.1-4
 Title: Evolutionary Multiobjective Optimization Algorithms
 Description: Collection of building blocks for the design and analysis
   of evolutionary multiobjective optimization algorithms.
