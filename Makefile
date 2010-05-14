@@ -48,10 +48,11 @@ package: clean data
 
 pkg:
 	echo "Updating 'Version' field..."
-	sed -i -e "s/^Version: UNKNOWN/Version: ${GITVERSION}/g" skel/DESCRIPTION
+	sed -i '' -e "s/^Version: UNKNOWN/Version: ${GITVERSION}/g" skel/DESCRIPTION
 	echo "Roxygenizing package..."
 	./roxygenize > roxygen.log 2>&1
-	sed -i -e "s/^Version:.*/Version: UNKNOWN/g" skel/DESCRIPTION
+	sed -i '' -e "s/^Version:.*/Version: UNKNOWN/g" skel/DESCRIPTION
+
 pkg/data: pkg
 	mkdir pkg/data
 
