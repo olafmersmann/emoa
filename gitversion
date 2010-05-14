@@ -1,7 +1,10 @@
 #!/bin/bash
 
-DESC=$(git describe --dirty --long | sed -e 's/^v//' | tr '.-' ' ')
-read MAJOR MINOR REVISION DESC DIRT <<< $DESC
+DESC=$(git describe --long | sed -e 's/^v//' | tr '.-' ' ')
+read MAJOR MINOR REVISION DESC <<< $DESC
+
+## Older git versions (Debian) do not know --dirty.
+DIRT=$(git status | grep "modified:\|added:\|deleted:" > /dev/null && echo "dirty")
 
 if [[ $DIRT = "dirty" ]] ; then
     echo "$MAJOR.$MINOR-$(date '+%s')"
