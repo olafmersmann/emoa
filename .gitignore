@@ -1,7 +1,6 @@
 *~
 *.o
 *.so
-skel/src/Makevars
 pkg/
 roxygen.log
 build.log
