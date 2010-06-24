@@ -5,7 +5,6 @@
 ##  Olaf Mersmann (OME) <olafm@statistik.tu-dortmund.de>
 ##
 
-require(mco)
 require(emoa)
 
 sms_emoa <- function(f, lower, upper, ...,
@@ -75,8 +74,15 @@ sms_emoa <- function(f, lower, upper, ...,
   return(res)
 }
 
-fun <- zdt3
+zdt3 <- function (x) {
+    dim <- length(x)
+    y1 <- x[1]
+    g <- 1 + (9 * mean(x[2:dim]))
+    y2 <- g * (1 - sqrt(y1/g) - (y1/g) * sin(10 * pi * y1))
+    return(c(y1, y2))
+}
+
 control <- list(mu=100L, maxeval=20000L,
                 logger=emoa_console_logger(100L))
 
-res <- sms_emoa(fun, rep(0, 30), rep(1, 30), control=control)
+res <- sms_emoa(zdt3, rep(0, 30), rep(1, 30), control=control)
