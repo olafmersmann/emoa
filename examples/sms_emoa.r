@@ -68,7 +68,9 @@ sms_emoa <- function(f, lower, upper, ...,
   }
   logger$stop()
   
-  res <- structure(list(X=X, Y=Y, eol=eol,
+  res <- structure(list(X=X, Y=Y,
+                        dob=dob,
+                        eol=eol,
                         par=X[,active], value=Y[,active]),
                    class="emoa_result")
   return(res)
