@@ -166,7 +166,7 @@ SEXP nondominated_order(SEXP s_points, SEXP s_tosort) {
     }
 
     /* Assign remaining ranks: */
-    int r = 1;
+    unsigned int r = 1;
     while (nsorted < ntosort) {
 	for (i = 0; i < n; ++i) {
 	    if (r != rank[i])  /* Skip all not in current rank */

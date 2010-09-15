@@ -25,15 +25,18 @@
 ##' @export
 nds_hv_selection <- function(values, n=1, ...) {
   #stopifnot(n == 1)
-  ranks <- nds_rank(values)
-  bad <- max(ranks)
-  sel  <- which(ranks == bad)
+  sel <- which(is_maximally_dominated(values))
+  
   ## Identify individual which gets replaced:
   if (length(sel) == 1) {
-    return(sel)
+    sel
   } else {
-    contrib <- hypervolume_contribution(values[,ranks==bad])
-    return(sel[which.min(contrib)])
+    contrib <- if (length(sel) == ncol(values)) {
+      hypervolume_contribution(values)
+    } else {
+       hypervolume_contribution(values[,sel])
+     }
+    sel[which.min(contrib)]
   }
 }
 

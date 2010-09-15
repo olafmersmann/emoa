@@ -5,14 +5,16 @@
 ##  Olaf Mersmann (OME) <olafm@statistik.tu-dortmund.de>
 ##
 
-##' \code{is_dominated} returns which points from a set are dominated by
-##' another point in the set. \code{\%dominates\%} returns true if
-##' \code{x} Pareto dominates \code{y}.
+##' \code{is_dominated} returns which points from a set are dominated
+##' by another point in the set. \code{\%dominates\%} returns true if
+##' \code{x} Pareto dominates \code{y} and
+##' \code{is_maximally_dominated} returns TRUE for those points which
+##' do not dominate any other points.
 ##'
 ##' @param points Matrix containing points one per column.
 ##'
-##' @return For \code{is_dominated} a boolean vector and for
-##'   \code{\%dominates\%} a single boolean.
+##' @return For \code{is_dominated} and \code{is_maximally_dominated}
+##' a boolean vector and for \code{\%dominates\%} a single boolean.
 ##'
 ##' @title Pareto dominance checks.
 ##'
@@ -25,6 +27,14 @@ is_dominated <- function(points) {
   #stopifnot(is.matrix(points))
   #stopifnot(is.numeric(points))
   .Call("is_dominated", points, PACKAGE="emoa")
+}
+
+##' @export
+##' @rdname dom_op
+is_maximally_dominated <- function(points) {
+  ## We should investiate a fast C implementation for this
+  r <- nds_rank(points)
+  r == max(r)
 }
 
 ##' Nondominated points
