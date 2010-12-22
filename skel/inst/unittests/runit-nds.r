@@ -63,6 +63,11 @@ test.nds_rank.args <- function() {
   checkException(nds_rank(points, partial="a"))
 }
 
+## Bug fixed i
+test.single_nds <- function() {
+  checkEquals(dim(nondominated_points(points[,-(1:3)])), c(3, 1))
+}
+
 ##test_dominates_op <- function() {
 ##  x <- c(1, 2, 1)
 ##  y <- c(2, 1, 2)

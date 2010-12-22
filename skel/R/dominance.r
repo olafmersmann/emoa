@@ -51,7 +51,7 @@ is_maximally_dominated <- function(points) {
 ##' @export
 ##' @keywords optimize
 nondominated_points <- function(points)
-  points[,!is_dominated(points)]
+  points[,!is_dominated(points), drop=FALSE]
 
 ##' Nondominated sorting ranks
 ##'
