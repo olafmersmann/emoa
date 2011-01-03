@@ -8,8 +8,7 @@
 N <- 10000L
 f <- sbx_operator(2, 0.8, -2, 2)
 parents <- matrix(c(0, 1), ncol=2)
-print(parents)
-x <- t(replicate(N, f(parents)))[,1]
+x <- replicate(N, c(f(parents)))[1,]
 
 test.sbxP1 <- function() {
   p <- mean(x != 0)
