@@ -6,7 +6,7 @@
 simpleFront <- matrix(c(0.0, 1.0, 0.5,
                         1.0, 0.0, 0.5),
                       ncol=3, byrow=TRUE)
-
+        
 infFront <- simpleFront
 infFront[,2] <- Inf
 
@@ -45,4 +45,18 @@ test.badInput <- function() {
   checkException(dominated_hypervolume("abc"))
   checkException(dominated_hypervolume(simpleFront, 1:3))
   checkException(dominated_hypervolume(simpleFront, 1))
+}
+
+test.dhv3d <- function() {
+  ## Built with Lego. Hurra!
+  m3 <- structure(c(5, 2, 0, 4, 3, 0, 4, 2, 1, 4, 1, 2, 3, 2, 2, 2, 3,
+                    2, 4, 0, 3, 3, 1, 3, 2, 2, 3, 3, 0, 4, 2, 1, 4, 1,
+                    2, 4, 0, 3, 4, 0, 2, 5), .Dim = c(3L, 14L))
+  m3_dhv <- c(1, 1,
+              1,
+              2, 1, 1,
+              2, 1, 1,
+              2, 2, 1, 1,
+              1)
+  checkEqualsNumeric(hypervolume_contribution(m3, c(6, 4, 6)), m3_dhv)
 }
