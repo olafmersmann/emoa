@@ -8,3 +8,4 @@ License: GPL-2
 URL: http://www.statistik.tu-dortmund.de/~olafm/software/emoa/
 LazyData: yes
 Version: UNKNOWN
+Suggests: RUnit
