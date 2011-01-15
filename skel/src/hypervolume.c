@@ -46,10 +46,8 @@ void calc_hv_contrib_2d(const double *data, const double *ref, double *res,
 
 void calc_hv_contrib_anyd(double *data, const double *ref, double *res, const size_t n, size_t k) {
     const double tothv = fpli_hv(data, k, n, ref);
-    Rprintf("total hv: %f\n", tothv);
     for (int i = 0; i < n; ++i) {
 	const double ihv = fpli_hv(data + k, k, n-1, ref);
-        Rprintf("ihv: %f\n", ihv);
 	res[i] = tothv - ihv;
 	/* Swap ith and last row in data matrix: */
 	if (i != (n - 1)) {
