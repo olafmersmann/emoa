@@ -60,3 +60,16 @@ test.dhv3d <- function() {
               1)
   checkEqualsNumeric(hypervolume_contribution(m3, c(6, 4, 6)), m3_dhv)
 }
+
+## Regression test for the permutation bug (missing duplicate()).
+test.regress_perm <- function() {
+  ## Built with Lego. Hurra!
+  m3 <- structure(c(5, 2, 0, 4, 3, 0, 4, 2, 1, 4, 1, 2, 3, 2, 2, 2, 3,
+                    2, 4, 0, 3, 3, 1, 3, 2, 2, 3, 3, 0, 4, 2, 1, 4, 1,
+                    2, 4, 0, 3, 4, 0, 2, 5), .Dim = c(3L, 14L))
+  o3 <- structure(c(5, 2, 0, 4, 3, 0, 4, 2, 1, 4, 1, 2, 3, 2, 2, 2, 3,
+                    2, 4, 0, 3, 3, 1, 3, 2, 2, 3, 3, 0, 4, 2, 1, 4, 1,
+                      2, 4, 0, 3, 4, 0, 2, 5), .Dim = c(3L, 14L))
+  hypervolume_contribution(m3)
+  checkEqualsNumeric(m3, o3)
+}

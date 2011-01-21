@@ -88,10 +88,11 @@ SEXP do_dominated_hypervolume(SEXP s_data, SEXP s_ref) {
 
 SEXP do_hv_contrib(SEXP s_data, SEXP s_ref) {
     SEXP s_res;
-  
+    double *ddata;
+
     UNPACK_REAL_MATRIX(s_data, data, k_data, n_data);
     UNPACK_REAL_VECTOR(s_ref, ref, n_ref);
-
+    
     if (n_ref != k_data)
 	error("ref and data must have the same dimension.");
     
@@ -104,7 +105,12 @@ SEXP do_hv_contrib(SEXP s_data, SEXP s_ref) {
 	calc_hv_contrib_2d(data, ref, res, n_data, k_data);
 	break;
     default:
-	calc_hv_contrib_anyd(data, ref, res, n_data, k_data);
+        /* calc_hv_contrib modifies 'data', so we need to make sure we
+         * duplicate it before use. 
+         */
+        ddata = (double *)R_alloc(k_data * n_data, sizeof(double));
+        memcpy(ddata, data, sizeof(double) * k_data * n_data);
+	calc_hv_contrib_anyd(ddata, ref, res, n_data, k_data);
 	break;
     }
     UNPROTECT(1); /* s_res */
