@@ -15,7 +15,8 @@
 ##'
 ##' @param values Matrix of function values.
 ##' @param n      Number of individuals to select for replacement.
-##' @param ...    optimal parameters.
+##' @param ...    Optional parameters passed to
+##'   \code{\link{hypervolume_contribution}}. 
 ##' 
 ##' @title Selection strategies
 ##' @aliases nds_hv_selection nds_cd_selection
@@ -23,7 +24,7 @@
 ##' @author Olaf Mersmann \email{olafm@@statistik.tu-dortmund.de}
 ##' @keywords optimize nonlinear
 ##' @export
-nds_hv_selection <- function(values, n=1, ...) {
+nds_hv_selection <- function(values, n=1, ...) {  
   #stopifnot(n == 1)
   sel <- which(is_maximally_dominated(values))
   
@@ -32,9 +33,9 @@ nds_hv_selection <- function(values, n=1, ...) {
     sel
   } else {
     contrib <- if (length(sel) == ncol(values)) {
-      hypervolume_contribution(values)
+        hypervolume_contribution(values, ...)
     } else {
-       hypervolume_contribution(values[,sel])
+       hypervolume_contribution(values[,sel], ...)
      }
     sel[which.min(contrib)]
   }
