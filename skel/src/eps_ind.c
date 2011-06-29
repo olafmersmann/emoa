@@ -32,42 +32,44 @@
 
 typedef enum  {additive, multiplicative} method_t;
 
+#define MAX(A, B) ((A > B) ? A : B)
+#define MIN(A, B) ((A < B) ? A : B)
+
 /*
  * calc_eps_ind:
  *  a - reference front
  *  b - current front
  */
-static double calc_eps_ind(double  *a, size_t size_a, 
-			   double  *b, size_t size_b, 
-			   size_t dim, method_t method) {
-    size_t i, j, k;
-    double  eps, eps_j = 0.0, eps_k = 0.0, eps_temp;
+static double calc_eps_ind(double  *a, const size_t a_points,
+			   double  *b, const size_t b_points,
+			   const size_t number_of_objectives, 
+                           method_t method) {
+    size_t i, j, current_objective;
+    double  maximal_eps, minimal_pointwise_eps, pointwise_eps, eps;
     
-    eps = (additive == method) ? DBL_MIN : 0.0;
-    
-    for (i = 0; i < size_a; i++) {
-	double *ai = a + i*dim;
-	for (j = 0; j < size_b; j++) {
-	    double *bj = b + j*dim;
-	    for (k = 0; k < dim; k++) {
+    maximal_eps = (additive == method) ? -DBL_MAX : 0.0;
+    for (i = 0; i < a_points; i++) {
+        minimal_pointwise_eps = DBL_MAX;
+	const double *ai = a + i * number_of_objectives;
+        for (j = 0; j < b_points; j++) {
+            pointwise_eps = -DBL_MAX;
+	    const double *bj = b + j * number_of_objectives;
+	    for (current_objective = 0; current_objective < number_of_objectives; ++current_objective) {
 		switch (method) {
 		case additive:
-		    eps_temp = bj[k] - ai[k];
+		    eps = bj[current_objective] - ai[current_objective];
 		    break;
 		case multiplicative:
-		    eps_temp = bj[k] / ai[k];
+		    eps = bj[current_objective] / ai[current_objective];
 		    break;
 		}
-		if ((0 == k) || (eps_k < eps_temp))
-		    eps_k = eps_temp;
+                pointwise_eps = MAX(pointwise_eps, eps);
 	    }
-	    if ((0 == j) || (eps_j > eps_k))
-		eps_j = eps_k;
+            minimal_pointwise_eps = MIN(minimal_pointwise_eps, pointwise_eps);
 	}
-	if ((0 == i) || (eps < eps_j))
-	    eps = eps_j;
-    }    
-    return eps;
+        maximal_eps = MAX(maximal_eps, minimal_pointwise_eps);
+    }
+    return maximal_eps;
 }
 
 
@@ -83,19 +85,17 @@ static double calc_eps_ind(double  *a, size_t size_a,
 
 SEXP do_eps_ind(SEXP s_data, SEXP s_ref) {
     SEXP s_res;
-        
+    
     /* Unpack arguments */
-    UNPACK_REAL_MATRIX(s_data, data, n_data, k_data);
-    UNPACK_REAL_MATRIX(s_ref, ref, n_ref, k_ref);
+    UNPACK_REAL_MATRIX(s_data, data, number_of_objectives, number_of_points);
+    UNPACK_REAL_MATRIX(s_ref, ref, number_of_ref_objectives, number_of_ref_points);
     
-    if (k_ref != k_data)
-	error("Reference and current front must have the same dimension.");
+    if (number_of_ref_objectives != number_of_objectives)
+        error("Reference and current front must have the same dimension.");
     
-    /* Allocate result */
-    PROTECT(s_res = allocVector(REALSXP, 1));
-    double *res = REAL(s_res);
     /* Calculate criterion */
-    res[0] = calc_eps_ind(ref, n_ref, data, n_data, k_data, additive);  
-    UNPROTECT(1); /* s_res */
-    return s_res;
+    double res = calc_eps_ind(ref, number_of_ref_points, 
+                              data, number_of_points, number_of_objectives, 
+                              additive);
+    return ScalarReal(res);
 }

@@ -6,7 +6,7 @@ x <- matrix(c(1.0, 0.5, 0.0,
               0.0, 0.5, 1.0),            
             ncol=3, byrow=TRUE)
 
-runit.epsilonIndicator <- function() {
+runit.epsilon_indicator <- function() {
   k <- nrow(x)
   n <- ncol(x)
   ## Check for different permutations of the rows and columns of
@@ -16,13 +16,20 @@ runit.epsilonIndicator <- function() {
     p <- sample(1:k)
     m <- x[p,o]
     for (delta in seq(0, 1, by=0.2)) {
-      checkEqualsNumeric(epsilonIndicator(m, m + delta), -delta)
-      checkEqualsNumeric(epsilonIndicator(m + delta, m), delta)
+      checkEqualsNumeric(epsilon_indicator(m, m + delta), -delta)
+      checkEqualsNumeric(epsilon_indicator(m + delta, m), delta)
     }
   }
   ## Check different sized matrices:
-  checkEqualsNumeric(epsilonIndicator(x, x[,-2] + 0.2), -0.2)
+  checkEqualsNumeric(epsilon_indicator(x, x[,-2] + 0.2), -0.2)
   ## Negative values:
-  checkException(epsilonIndicator(x, x-10))
-  checkException(epsilonIndicator(x-10, x))
+  checkException(epsilon_indicator(x, x-10))
+  checkException(epsilon_indicator(x-10, x))
+}
+
+ruint.epsilon_indicator_differently_sized_fronts <- function() {
+  front1 <- matrix(runif(100), nrow=2)
+  front2 <- matrix(runif(150), nrow=3)
+  checkException(checkepsilon_indicator(nondominated_points(front1),
+                                        nondominated_points(front2)))
 }
