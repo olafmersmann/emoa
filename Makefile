@@ -33,7 +33,7 @@ data: pkg/data/cec2007.rda
 
 clean:
 	echo "Cleaning up..."
-	rm -fR skel/src/*.o skel/src/*.so skel.Rcheck
+	rm -fR skel/src/*.o skel/src/*.so skel.Rcheck skel/src/weight_vectors.h
 	rm -fR pkg
 	rm -fR .RData .Rhistory build.log install.log roxygen.log
 
@@ -46,7 +46,7 @@ package: clean data
 	-git stash pop -q
 	rm -f pkg/ChangeLog
 
-pkg:
+pkg: skel/src/weight_vectors.h
 	echo "Updating 'Version' field..."
 	sed -i '' -e "s/^Version: UNKNOWN/Version: ${GITVERSION}/g" skel/DESCRIPTION
 	echo "Roxygenizing package..."
@@ -59,3 +59,9 @@ pkg/data: pkg
 pkg/data/cec2007.rda: pkg/data data/cec2007/convert.r $(ls data/cec2007/*.txt)
 	echo "Creating CEC2007 dataset..."
 	(cd data/cec2007/ ; Rscript convert.r)
+
+skel/src/weight_vectors.h: skel/src/r_ind.c skel/src/precomputed_weight_vectors.def
+	echo "Precomputing weight vectors for R indicator..."
+	$(CC) -std=c99 -DGENERATE_WV_HEADER -o skel/src/gen_header $<
+	skel/src/gen_header > $@
+	rm skel/src/gen_header
