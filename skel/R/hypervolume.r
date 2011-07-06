@@ -70,7 +70,7 @@ dominated_hypervolume <- function(points, ref) {
     return(NaN)
   }
   
-  .Call("do_dominated_hypervolume", points, ref, PACKAGE="emoa")
+  .Call(do_dominated_hypervolume, points, ref, PACKAGE="emoa")
 }
 
 ##' @export
@@ -87,5 +87,5 @@ hypervolume_contribution <- function(points, ref) {
     stop("Reference point and front must have the same dimension.")
 
   ## Call C code:
-  .Call("do_hv_contrib", points, ref, PACKAGE="emoa")
+  .Call(do_hv_contrib, points, ref, PACKAGE="emoa")
 }

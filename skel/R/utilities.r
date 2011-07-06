@@ -5,6 +5,9 @@
 ##  Olaf Mersmann (OME) <olafm@statistik.tu-dortmund.de>
 ##
 
+##' @useDynLib emoa do_which_points_on_edge
+NA
+
 rsbxbeta <- function(n, nc) {
     ## U ~ [0, 1] , twou := 2 * U ~ [0, 2]
     twou <- runif(n, 0, 2.0)

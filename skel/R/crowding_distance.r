@@ -13,4 +13,4 @@
 ##'
 ##' @author Olaf Mersmann \email{olafm@@statistik.tu-dortmund.de}
 crowding_distance <- function(front)
-  .Call("do_crowding_distance", front, PACKAGE="emoa")
+  .Call(do_crowding_distance, front)

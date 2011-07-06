@@ -17,5 +17,5 @@
 sympart <- function(x) {
   #stopifnot(length(x) >= 2)
   #stopifnot(length(x) %% 2 == 0)
-  .Call("do_sympart", as.numeric(x), PACKAGE="emoa")
+  .Call(do_sympart, as.numeric(x))
 }

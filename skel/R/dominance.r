@@ -26,7 +26,7 @@
 is_dominated <- function(points) {
   #stopifnot(is.matrix(points))
   #stopifnot(is.numeric(points))
-  .Call("is_dominated", points, PACKAGE="emoa")
+  .Call(do_is_dominated, points)
 }
 
 ##' @export
@@ -79,7 +79,7 @@ nds_rank <- function(points, partial) {
   else
     stopifnot(is.integer(partial))
   
-  .Call("nondominated_order", points, partial, PACKAGE="emoa")
+  .Call(nondominated_order, points, partial)
 }
 
 ##' @export

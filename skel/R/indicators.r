@@ -5,7 +5,6 @@
 ##  Olaf Mersmann (OME) <olafm@statistik.tu-dortmund.de>
 ##
 
-
 ##' Scale point cloud
 ##'
 ##' Rescale all points to lie in the box bounded by \code{minval}
@@ -76,7 +75,7 @@ epsilon_indicator <- function(points, o) {
   if (any(points < 0) || any(o < 0))
     stop("The epsilon indicator is only defined for strictly positive objective values.")
   
-  .Call("do_eps_ind", points, o, PACKAGE="emoa")
+  .Call(do_eps_ind, points, o)
 }
 
 ##
@@ -97,14 +96,16 @@ r_indicator <- function(points, o, ideal, nadir, lambda, utility, summary) {
   dim <- nrow(points)
   if (missing(lambda)) {
     lambda <- if (dim == 2) { 500 }
-         else if (dim == 3) { 30  }
-         else if (dim == 4) { 12  }
-         else if (dim == 5) { 8   }
-         else               { 3   }
+    else if (dim == 3) { 30  }
+    else if (dim == 4) { 12  }
+    else if (dim == 5) { 8   }
+    else               { 3   }
   }
   
-  ix <- .Call("do_r_ind", points, ideal, nadir, as.integer(lambda), as.integer(method), PACKAGE="emoa")
-  io <- .Call("do_r_ind", o, ideal, nadir, as.integer(lambda), as.integer(method), PACKAGE="emoa")
+  ix <- .Call(do_r_ind, points, ideal, nadir,
+              as.integer(lambda), as.integer(method))
+  io <- .Call(do_r_ind, o, ideal, nadir,
+              as.integer(lambda), as.integer(method))
 
   return(summary(ix, io))
 }

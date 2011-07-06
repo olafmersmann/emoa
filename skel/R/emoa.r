@@ -29,6 +29,15 @@
 ##' @title The EMOA package
 ##' @author Olaf Mersmann \email{olafm@@statistik.tu-dortmund.de}
 ##' @keywords package
-##' @useDynLib emoa
-
+##' @useDynLib emoa do_which_points_on_edge
+##' @useDynLib emoa do_hv_contrib
+##' @useDynLib emoa do_dominated_hypervolume
+##' @useDynLib emoa do_crowding_distance
+##' @useDynLib emoa do_is_dominated
+##' @useDynLib emoa nondominated_order
+##' @useDynLib emoa do_eps_ind
+##' @useDynLib emoa do_r_ind
+##' @useDynLib emoa do_pm
+##' @useDynLib emoa do_sbx
+##' @useDynLib emoa do_sympart
 NA

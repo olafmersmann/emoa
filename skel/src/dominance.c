@@ -56,13 +56,13 @@ static R_INLINE int dominates(double *p, R_len_t i, R_len_t j, R_len_t nobj) {
 }
 
 /*
- * is_dominated
+ * dp_is_dominated
  *
  * Returns a logical vector whose length corresponds to the number of
  * columns contained in the matrix s_points. TRUE means the point is
  * dominated by some other point in s_points.
  */
-SEXP is_dominated(SEXP s_points) {
+SEXP do_is_dominated(SEXP s_points) {
     SEXP s_res;
     R_len_t i, j;
     

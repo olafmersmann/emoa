@@ -8,7 +8,6 @@
 ##'
 ##' @author Olaf Mersmann \email{olafm@@statistik.tu-dortmund.de}
 ##'
-##' @useDynLib emoa do_which_points_on_edge
 ##' @export
 which_points_on_edge <- function(front) {
   which(.Call(do_which_points_on_edge, front))
