@@ -165,7 +165,7 @@ void dump_weights(int lambda, int objectives) {
 int main(int argc, char **argv) {
     printf("#ifndef WEIGHT_VECTORS_H\n\n");
 #define DO_PRECOMPUTED_WEIGHT_VECTOR(L, D) dump_weights(L, D);
-#include "precomputed_weight_vectors.def"
+#include "precomputed_weight_vectors.h"
     printf("\n#endif WEIGHT_VECTORS_H\n");
     return 0;
 }
@@ -207,7 +207,7 @@ SEXP do_r_ind(SEXP s_data,
         wv = weights_ ## L ## _ ## D;                                 \
     } else 
 
-    #include "precomputed_weight_vectors.def" 
+    #include "precomputed_weight_vectors.h" 
     {
         must_free_weight_vectors = TRUE;
         wv = create_weight_vectors(lambda, k_data, &nwv);

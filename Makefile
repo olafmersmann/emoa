@@ -60,7 +60,7 @@ pkg/data/cec2007.rda: pkg/data data/cec2007/convert.r $(ls data/cec2007/*.txt)
 	echo "Creating CEC2007 dataset..."
 	(cd data/cec2007/ ; Rscript convert.r)
 
-skel/src/weight_vectors.h: skel/src/r_ind.c skel/src/precomputed_weight_vectors.def
+skel/src/weight_vectors.h: skel/src/r_ind.c skel/src/precomputed_weight_vectors.h
 	echo "Precomputing weight vectors for R indicator..."
 	$(CC) -std=c99 -DGENERATE_WV_HEADER -o skel/src/gen_header $<
 	skel/src/gen_header > $@
