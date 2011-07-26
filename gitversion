@@ -1,13 +1,18 @@
 #!/bin/bash
 
-DESC=$(git describe --long | sed -e 's/^v//' | tr '.-' ' ')
-read MAJOR MINOR REVISION DESC <<< $DESC
+if [[ -d .git ]] ; then
+    DESC=$(git describe --long | sed -e 's/^v//' | tr '.-' ' ')
+    read MAJOR MINOR REVISION DESC <<< $DESC
 
-## Older git versions (Debian) do not know --dirty.
-DIRT=$(git status | grep "modified:\|added:\|deleted:" > /dev/null && echo "dirty")
+    ## Older git versions (Debian) do not know --dirty.
+    DIRT=$(git status | grep "modified:\|added:\|deleted:" > /dev/null && echo "dirty")
 
-if [[ $DIRT = "dirty" ]] ; then
-    echo "$MAJOR.$MINOR-$(date '+%s')"
+    if [[ $DIRT = "dirty" ]] ; then
+        echo "$MAJOR.$MINOR-$(date '+%s')"
+    else
+        echo "$MAJOR.$MINOR-$REVISION"
+    fi
 else
-    echo "$MAJOR.$MINOR-$REVISION"
+    ## This must be a tarball from cgit. Use a low version number.
+    echo "0.0-1"
 fi
