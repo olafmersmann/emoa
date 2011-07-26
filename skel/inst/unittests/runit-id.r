@@ -59,3 +59,11 @@ test.r_indicators <- function() {
   checkTrue(r212 < r221)
   checkTrue(r312 < r321)
 }
+
+test.eps_indicator <- function() {
+  p1 <- points[, no==1]
+  p2 <- points[, no==2]
+
+  checkEquals(epsilon_indicator(p1, p2), 0)
+  checkEquals(epsilon_indicator(p2, p1), 0.6)
+}
