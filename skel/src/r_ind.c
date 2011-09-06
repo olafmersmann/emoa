@@ -154,7 +154,7 @@ void dump_weights(int lambda, int objectives) {
     double *weight_vectors = create_weight_vectors(lambda, objectives, &nwv);
     
     printf("const int number_of_weights_%i_%i = %i;\n", lambda, objectives, nwv);
-    printf("const double weights_%i_%i[] = {\n", lambda, objectives);
+    printf("double weights_%i_%i[] = {\n", lambda, objectives);
     for (current = 0; current < nwv * objectives; ++current) {
         printf("%f, ", weight_vectors[current]);
     }

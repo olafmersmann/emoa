@@ -84,8 +84,6 @@ static double calc_eps_ind(double  *a, const size_t a_points,
 
 
 SEXP do_eps_ind(SEXP s_data, SEXP s_ref) {
-    SEXP s_res;
-    
     /* Unpack arguments */
     UNPACK_REAL_MATRIX(s_data, data, number_of_objectives, number_of_points);
     UNPACK_REAL_MATRIX(s_ref, ref, number_of_ref_objectives, number_of_ref_points);

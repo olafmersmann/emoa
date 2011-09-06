@@ -55,7 +55,6 @@ SEXP do_which_points_on_edge(SEXP s_front) {
             double *other_point_values = front + other_point * number_of_objectives;
             size_t number_of_dominated_objectives = 0;
             size_t last_dominated_objective;
-            double last_dominated_objective_value;
             for (objective = 0; objective < number_of_objectives; ++objective) {
                 const double this_value = point_values[objective];
                 const double other_value = other_point_values[objective];
