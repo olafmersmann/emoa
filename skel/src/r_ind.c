@@ -23,6 +23,7 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include <math.h>
+#define error(...) exit(-1)
 #else
 #include <R.h>
 #include <Rmath.h>
@@ -88,7 +89,7 @@ static void int2kary(int x, const int basek, const int digits, int *kary) {
     int i;
     int val;
     if (x >= ipow(basek,digits)) {
-        printf("Number in int2kary() too large. Exiting.\n");
+        error("Number in int2kary() too large. Exiting.");
         return;
     }
     val = digits-1;
@@ -153,7 +154,7 @@ void dump_weights(int lambda, int objectives) {
     int nwv;    
     double *weight_vectors = create_weight_vectors(lambda, objectives, &nwv);
     
-    printf("const int number_of_weights_%i_%i = %i;\n", lambda, objectives, nwv);
+    printf("unsigned int number_of_weights_%i_%i = %i;\n", lambda, objectives, nwv);
     printf("double weights_%i_%i[] = {\n", lambda, objectives);
     for (current = 0; current < nwv * objectives; ++current) {
         printf("%f, ", weight_vectors[current]);
@@ -197,7 +198,7 @@ SEXP do_r_ind(SEXP s_data,
 	error("Nadir and current front must have the same dimension.");
 
     /* Generate weight vectors */
-    int nwv;
+    unsigned int nwv;
     double *wv = NULL;
 
     /* Compute weights: */
