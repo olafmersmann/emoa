@@ -124,7 +124,7 @@ size_t choose(int r, int k) {
 /* 
  * create_weight_vectors - sample from all possible weight vectors
  */
-static double *create_weight_vectors(const int s, const int k, int *pnwv) {
+static double *create_weight_vectors(const int s, const int k, unsigned int *pnwv) {
     int c = 0, i = 0;
     size_t nwv = (int) choose(s + k - 1, k - 1);
     double *wv = (double *)malloc(nwv*k * sizeof(double));
@@ -167,7 +167,7 @@ int main(int argc, char **argv) {
     printf("#ifndef WEIGHT_VECTORS_H\n\n");
 #define DO_PRECOMPUTED_WEIGHT_VECTOR(L, D) dump_weights(L, D);
 #include "precomputed_weight_vectors.h"
-    printf("\n#endif WEIGHT_VECTORS_H\n");
+    printf("\n#endif /* WEIGHT_VECTORS_H */\n");
     return 0;
 }
 
