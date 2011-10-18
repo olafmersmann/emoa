@@ -45,7 +45,7 @@
 
 #include "hv.h"
 #include "avl.h"
-
+#include <R.h>
 #include <stdlib.h>
 #include <stdio.h>
 #include <limits.h>
@@ -448,6 +448,8 @@ hv_recursive(dlnode_t *list, int dim, int c, const double * ref,
                 "manuel.lopez-ibanez@ulb.ac.be\n", __FILE__, __LINE__);
         exit(EXIT_FAILURE);
         */
+        error("hv: UNREACHABLE CODE REACHED. Please report this to the package author.");
+        return -1.0; /* Never reached. */
     }
 }
 
