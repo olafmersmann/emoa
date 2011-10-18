@@ -1,7 +1,1 @@
-*~
-*.o
-*.so
-pkg/
-roxygen.log
-build.log
-install.log
+skel/src/weight_vectors.h
