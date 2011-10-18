@@ -17,6 +17,7 @@ help: usage
 	echo " pkg      - roxygenize skel/ into pkg/"
 	echo " data     - generate R data files from raw text files"
 
+unexport MAKEFLAGS
 install: clean data
 	echo "Installing package..."
 	R CMD INSTALL --no-multiarch pkg > install.log 2>&1
@@ -25,6 +26,7 @@ test: install
 	echo "Running unit tests..."
 	Rscript pkg/inst/unittests/runner.r
 
+unexport MAKEFLAGS
 check: clean data
 	echo "Running R CMD check..."
 	R CMD check pkg && rm -fR pkg.Rcheck
