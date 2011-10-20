@@ -69,6 +69,7 @@ ubm_operator <- function(p) {
 ##' @export
 ##' @author Olaf Mersmann \email{olafm@@statistik.tu-dortmund.de}
 sms_ga <- function(f, nvars, ...,
+                   initial_population,
                    control=list(mu=100L,
                      crossover=bx_operator(0.75),
                      mutate=ubm_operator(0.05)
@@ -88,7 +89,17 @@ sms_ga <- function(f, nvars, ...,
   eol <- rep(-1L, control$maxeval)
   
   ## Random inital population:
-  X[, 1:control$mu] <- replicate(control$mu, sample(0:1, nvars, replace=TRUE))
+  X[, 1:control$mu] <- if (!missing(initial_population)) {
+    if (nrow(initial_population) != nvars)
+      stop("Initial population must consist of individuals with " + nvars + " parameters.")
+    if (ncol(initial_population) != control$mu)
+      stop("Initial population must contain " + control$mu + " individuals")
+    if (!all(initial_population %in% c(0, 1)))
+      stop("Initial population can only contain values of 0 or 1.")
+    initial_population
+  } else {
+    replicate(control$mu, sample(0:1, nvars, replace=TRUE))
+  }
   Y[, 1:control$mu] <- sapply(1:control$mu, function(i) f(X[,i]))
   control$ref <- apply(Y[, 1:control$mu], 1, max)
 
