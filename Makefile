@@ -64,6 +64,6 @@ pkg/data/cec2007.rda: pkg/data data/cec2007/convert.r $(ls data/cec2007/*.txt)
 
 skel/src/weight_vectors.h: skel/src/r_ind.c skel/src/precomputed_weight_vectors.h
 	echo "Precomputing weight vectors for R indicator..."
-	$(CC) -std=c99 -lm -DGENERATE_WV_HEADER -o skel/src/gen_header $<
+	$(CC) -std=c99 -lm -Os -DGENERATE_WV_HEADER -o skel/src/gen_header $<
 	skel/src/gen_header > $@
 	rm skel/src/gen_header
