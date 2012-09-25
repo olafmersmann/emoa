@@ -43,9 +43,6 @@ nds_hv_selection <- function(values, n=1, ...) {
 
 ##' @export
 ##' @rdname nds_hv_selection
-##' @param values - matrix of individuals, one per column
-##' @param n - number of individuals to select for elimination
-##' @param ... - ignored
 nds_cd_selection <- function(values, n=1, ...) {
   #stopifnot(n == 1)
   N <- ncol(values)
