@@ -127,3 +127,21 @@ r2_indicator <- function(points, o, ideal, nadir, lambda, utility="Tchebycheff")
 r3_indicator <- function(points, o, ideal, nadir, lambda, utility="Tchebycheff") 
     r_indicator(points, o, ideal, nadir, lambda, utility,
                 function(ua, ur) mean((ur - ua)/ur))
+
+##' Unary R2 indicator
+##' 
+##' @param points Matrix of points for which to calculate the indicator
+##'   value stored one per column.
+##' @param weights Matrix of weight vectors stored one per column.
+##' @param ideal Ideal point of true Pareto front. If omited the ideal
+##'   of \code{points} is used.
+##' @return Value of unary R2 indicator.
+##' 
+##' @export
+##' @author Olaf Mersmann \email{olafm@@p-value.net}
+unary_r2_indicator <- function(points, weights, ideal) {
+  if (missing(ideal)) 
+    ideal <- apply(points, 1, min)
+
+  .Call(do_unary_r2_ind, points, weights, ideal)
+}

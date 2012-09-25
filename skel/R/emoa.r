@@ -37,6 +37,7 @@
 ##' @useDynLib emoa nondominated_order
 ##' @useDynLib emoa do_eps_ind
 ##' @useDynLib emoa do_r_ind
+##' @useDynLib emoa do_unary_r2_ind
 ##' @useDynLib emoa do_pm
 ##' @useDynLib emoa do_sbx
 ##' @useDynLib emoa do_sympart
