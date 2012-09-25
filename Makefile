@@ -50,10 +50,10 @@ package: clean data
 
 pkg: skel/src/weight_vectors.h
 	echo "Updating 'Version' field..."
-	sed -i '' -e "s/^Version: UNKNOWN/Version: ${GITVERSION}/g" skel/DESCRIPTION
+	sed -i'' -e "s/^Version: UNKNOWN/Version: ${GITVERSION}/g" skel/DESCRIPTION
 	echo "Roxygenizing package..."
 	./roxygenize > roxygen.log 2>&1
-	sed -i '' -e "s/^Version:.*/Version: UNKNOWN/g" skel/DESCRIPTION
+	sed -i'' -e "s/^Version:.*/Version: UNKNOWN/g" skel/DESCRIPTION
 
 pkg/data: pkg
 	mkdir pkg/data
@@ -64,6 +64,6 @@ pkg/data/cec2007.rda: pkg/data data/cec2007/convert.r $(ls data/cec2007/*.txt)
 
 skel/src/weight_vectors.h: skel/src/r_ind.c skel/src/precomputed_weight_vectors.h
 	echo "Precomputing weight vectors for R indicator..."
-	$(CC) -std=c99 -DGENERATE_WV_HEADER -o skel/src/gen_header $<
+	$(CC) -std=c99 -lm -DGENERATE_WV_HEADER -o skel/src/gen_header $<
 	skel/src/gen_header > $@
 	rm skel/src/gen_header

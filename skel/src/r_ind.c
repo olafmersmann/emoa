@@ -3,7 +3,8 @@
  *
  * This file includes both helper functions to calculate R indicator
  * values from R as well as a utility to precompute common weight
- * vector sets to speed up the calculation. To generate the weight vectors, compile this file using
+ * vector sets to speed up the calculation. To generate the weight
+ * vectors, compile this file using
  *
  *  cc -std=c99 -DGENERATE_WV_HEADER -o gen_header r_ind.c
  *
@@ -126,18 +127,17 @@ size_t choose(int r, int k) {
  */
 static double *create_weight_vectors(const int s, const int k, unsigned int *pnwv) {
     int c = 0, i = 0;
-    size_t nwv = (int) choose(s + k - 1, k - 1);
-    double *wv = (double *)malloc(nwv*k * sizeof(double));
+    size_t nwv = choose(s + k - 1, k - 1);
+    double *wv = (double *)malloc(nwv * k * sizeof(double));
     int *count = (int *)malloc(k * sizeof(int));
-    
-    while (i < ipow(s + 1, k)) {
+    while (i < ipow(s + 1, k) && c < nwv) {
         int sum=0;
         int2kary(i, s + 1, k, count);
         for (int j = 0; j < k; ++j)
             sum += count[j];
         if (sum == s) {
             for (int j = 0; j < k; ++j)
-                wv[c*k + j] = (double)count[j] / (double)s;
+                wv[c * k + j] = (double)count[j] / (double)s;
             ++c;
 	}
         ++i;
