@@ -41,4 +41,5 @@
 ##' @useDynLib emoa do_pm
 ##' @useDynLib emoa do_sbx
 ##' @useDynLib emoa do_sympart
+##' @useDynLib emoa do_dominance_matrix
 NA

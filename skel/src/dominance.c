@@ -197,3 +197,39 @@ SEXP nondominated_order(SEXP s_points, SEXP s_tosort) {
     UNPROTECT(1); /* s_rank */
     return(s_rank);
 }
+
+SEXP do_dominance_matrix(SEXP s_points) {
+    SEXP s_res;
+    R_len_t i, j;
+    
+    /* Unpack arguments:
+     * Note how we turn the nxd R matrix (which is stored in column major
+     * order) into a dxn C matrix where all individuals are stored
+     * consecutivly instead of interleaved.
+     */
+    UNPACK_REAL_MATRIX(s_points, points, d, n);
+    
+    /* Allocate result matrix.
+     * 
+     * res[i, j] == TRUE <=> i-th point dominates j-th point
+     */
+    PROTECT(s_res = allocMatrix(LGLSXP, n, n));
+    int *res = LOGICAL(s_res);
+    
+    /* Initialy all points are not dominated: */
+    for (i = 0; i < n * n; ++i) 
+	res[i] = FALSE;
+    
+    for (i = 0; i < n; ++i) {
+        for (j = i+1; j < n; ++j) {
+	    int dom = dominates(points, i, j, d);
+	    if (dom > 0) { /* i dominates j */
+		res[n * j + i] = TRUE;
+	    } else if (dom < 0) { /* j dominates i */
+		res[n * i + j] = TRUE;
+	    }
+	}
+    }
+    UNPROTECT(1); /* s_res */
+    return s_res;
+}

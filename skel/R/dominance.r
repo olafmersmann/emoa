@@ -88,3 +88,13 @@ nondominated_ordering <- function(points, partial) {
   .Deprecated("nds_rank")
   nds_rank(par, partial)
 }
+
+#' Calculate the dominance matrix of a set of points
+#'
+#' @param points Matrix containing points one per column.
+#'
+#' @return Dominance matrix
+#' @export
+dominance_matrix <- function(points) {
+  .Call(do_dominance_matrix, points)
+}
