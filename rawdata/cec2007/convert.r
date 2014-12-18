@@ -95,4 +95,4 @@ pdef$pdef <- 1:nrow(pdef)
 cec2007 <- merge(cec2007, pdef)
 cec2007$metric <- as.factor(cec2007$metric)
 
-save(cec2007, file="../../pkg/data/cec2007.rda")
+save(cec2007, file="../../data/cec2007.rda")

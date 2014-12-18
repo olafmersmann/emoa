@@ -1,6 +1,0 @@
-#!/usr/bin/env Rscript
-## -*- mode: r -*-
-
-require("roxygen2")
-require("methods")
-roxygenize("skel", "pkg")

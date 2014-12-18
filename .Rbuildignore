@@ -1,0 +1,8 @@
+^dist/
+^do
+^examples/
+^rawdata/
+^check-.*/
+^.dict.rds
+^src/.*\.o
+^src/.*\.so
