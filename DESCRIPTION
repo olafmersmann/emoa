@@ -7,5 +7,5 @@ Maintainer: Olaf Mersmann <olafm@statistik.tu-dortmund.de>
 License: GPL-2
 URL: http://www.statistik.tu-dortmund.de/~olafm/software/emoa/
 LazyData: yes
-Version: 0.5-1.3
+Version: 0.5-1.4
 Suggests: testthat

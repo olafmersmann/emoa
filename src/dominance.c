@@ -27,8 +27,8 @@
 #include "bitstring.h"
 
 /*
- * dominates 
- * 
+ * dominates
+ *
  * Expects points to be a nxd matrix in _column_ major format. This is
  * the default format used by R.
  *
@@ -38,21 +38,21 @@
  *     1  iff points[,j] dominates points[,i]
  */
 static R_INLINE int dominates(double *p, R_len_t i, R_len_t j, R_len_t nobj) {
-    int i_flagged = 0;
-    int j_flagged = 0;
-    R_len_t k;
-    double *pi = p + i*nobj;
-    double *pj = p + j*nobj;
-    for (k = 0; k < nobj; ++k) {
-	const double p_ik = pi[k];
-	const double p_jk = pj[k];
-	if (p_ik < p_jk) {
-	    j_flagged = 1;
-	} else if (p_jk < p_ik) {
-	    i_flagged = 1;
-	}
+  int i_flagged = 0;
+  int j_flagged = 0;
+  R_len_t k;
+  double *pi = p + i * nobj;
+  double *pj = p + j * nobj;
+  for (k = 0; k < nobj; ++k) {
+    const double p_ik = pi[k];
+    const double p_jk = pj[k];
+    if (p_ik < p_jk) {
+      j_flagged = 1;
+    } else if (p_jk < p_ik) {
+      i_flagged = 1;
     }
-    return j_flagged - i_flagged;
+  }
+  return j_flagged - i_flagged;
 }
 
 /*
@@ -63,44 +63,44 @@ static R_INLINE int dominates(double *p, R_len_t i, R_len_t j, R_len_t nobj) {
  * dominated by some other point in s_points.
  */
 SEXP do_is_dominated(SEXP s_points) {
-    SEXP s_res;
-    R_len_t i, j;
-    
-    /* Unpack arguments:
-     * Note how we turn the nxd R matrix (which is stored in column major
-     * order) into a dxn C matrix where all individuals are stored
-     * consecutivly instead of interleaved.
-     */
-    UNPACK_REAL_MATRIX(s_points, points, d, n);
-    
-    /* Allocate result vector: 
-     *
-     * res[i] == TRUE  <=> i-th point is dominated
-     * res[i] == FALSE <=> i-th point is nondominated
-     */
-    PROTECT(s_res = allocVector(LGLSXP, n));
-    int *res = LOGICAL(s_res);
-    
-    /* Initialy all points are not dominated: */
-    for (i = 0; i < n; ++i) 
-	res[i] = FALSE;
-    
-    for (i = 0; i < n; ++i) {
-	if (res[i]) 
-	    continue; /* Point is dominated, skip */
-	for (j = (i+1); j < n; ++j) {
-	    if (res[j]) 
-		continue; /* Point is dominated, skip */
-	    int dom = dominates(points, i, j, d);
-	    if (dom > 0) { /* i dominates j */
-		res[j] = TRUE;
-	    } else if (dom < 0) { /* j dominates i */
-		res[i] = TRUE;
-	    }
-	}
+  SEXP s_res;
+  R_len_t i, j;
+
+  /* Unpack arguments:
+   * Note how we turn the nxd R matrix (which is stored in column major
+   * order) into a dxn C matrix where all individuals are stored
+   * consecutivly instead of interleaved.
+   */
+  UNPACK_REAL_MATRIX(s_points, points, d, n);
+
+  /* Allocate result vector:
+   *
+   * res[i] == TRUE  <=> i-th point is dominated
+   * res[i] == FALSE <=> i-th point is nondominated
+   */
+  PROTECT(s_res = allocVector(LGLSXP, n));
+  int *res = LOGICAL(s_res);
+
+  /* Initialy all points are not dominated: */
+  for (i = 0; i < n; ++i)
+    res[i] = FALSE;
+
+  for (i = 0; i < n; ++i) {
+    if (res[i])
+      continue; /* Point is dominated, skip */
+    for (j = (i + 1); j < n; ++j) {
+      if (res[j])
+        continue; /* Point is dominated, skip */
+      int dom = dominates(points, i, j, d);
+      if (dom > 0) { /* i dominates j */
+        res[j] = TRUE;
+      } else if (dom < 0) { /* j dominates i */
+        res[i] = TRUE;
+      }
     }
-    UNPROTECT(1); /* s_res */
-    return s_res;    
+  }
+  UNPROTECT(1); /* s_res */
+  return s_res;
 }
 
 /*
@@ -110,126 +110,126 @@ SEXP do_is_dominated(SEXP s_points) {
  * front membership instead of actually sorting the matrix s_points.
  */
 SEXP nondominated_order(SEXP s_points, SEXP s_tosort) {
-    R_len_t i, j;
-    SEXP s_rank;
-    UNPACK_REAL_MATRIX(s_points, points, d, n); /* Note column major layout */
-    
-    R_len_t nsorted = 0;
-    R_len_t ntosort = INTEGER(s_tosort)[0];
+  R_len_t i, j;
+  SEXP s_rank;
+  UNPACK_REAL_MATRIX(s_points, points, d, n); /* Note column major layout */
 
-    /* Use compact bitstring for speed and ease of managment instead
-     * of a dynamicly sized array of arrays or linked lists.
-     */
-    bitstring_t *S = (bitstring_t *)Calloc(n, bitstring_t);
-    unsigned int *N = (unsigned int *)Calloc(n, unsigned int);
+  R_len_t nsorted = 0;
+  R_len_t ntosort = INTEGER(s_tosort)[0];
 
-    /* Allocate result vector: */
-    PROTECT(s_rank = allocVector(INTSXP, n));
-    int *rank = INTEGER(s_rank);
+  /* Use compact bitstring for speed and ease of managment instead
+   * of a dynamicly sized array of arrays or linked lists.
+   */
+  bitstring_t *S = (bitstring_t *)Calloc(n, bitstring_t);
+  unsigned int *N = (unsigned int *)Calloc(n, unsigned int);
 
-    /* Check to make sure we exit while() loop further down even if
-     * ntosort is missspecified. 
-     */
-    if (ntosort > n)
-	ntosort = n;
+  /* Allocate result vector: */
+  PROTECT(s_rank = allocVector(INTSXP, n));
+  int *rank = INTEGER(s_rank);
 
-    /* Initialize bitstrings and array counting the number of
-     * individuals that dominate the i-th individual.
-     */
+  /* Check to make sure we exit while() loop further down even if
+   * ntosort is missspecified.
+   */
+  if (ntosort > n)
+    ntosort = n;
+
+  /* Initialize bitstrings and array counting the number of
+   * individuals that dominate the i-th individual.
+   */
+  for (i = 0; i < n; ++i) {
+    bitstring_initialize(&S[i], n);
+    N[i] = 0;
+  }
+
+  for (i = 0; i < n; ++i) {
+    for (j = i + 1; j < n; ++j) {
+      int dom = dominates(points, i, j, d);
+      if (dom < 0) { /* j dominates i */
+        bitstring_set(S[j], i);
+        ++N[i];
+      } else if (dom > 0) { /* i dominates j */
+        bitstring_set(S[i], j);
+        ++N[j];
+      } else { /* neither dominates the other */
+      }
+    }
+  }
+
+  /* Assign initial ranks: */
+  for (i = 0; i < n; ++i) {
+    if (0 == N[i]) { /* Member of first front */
+      rank[i] = 1;
+      ++nsorted;
+    } else { /* Not yet decide what front i belongs to */
+      rank[i] = 0;
+    }
+  }
+
+  /* Assign remaining ranks: */
+  unsigned int r = 1;
+  while (nsorted < ntosort) {
     for (i = 0; i < n; ++i) {
-	bitstring_initialize(&S[i], n);
-	N[i] = 0;
+      if (r != rank[i]) /* Skip all not in current rank */
+        continue;
+      for (j = 0; j < n; ++j) {
+        if (bitstring_is_set(S[i], j)) { /* j in S_i */
+          --N[j];
+          if (0 == N[j]) { /* N_j == 0 -> assign rank */
+            rank[j] = r + 1;
+            ++nsorted;
+          }
+        }
+      }
     }
+    ++r;
+    /* Emergency exit: */
+    if (r > n) {
+      error("r > n. This should never happen. "
+            "Please send a detailed bug report to the package author.");
+    }
+  }
 
-    for (i = 0; i < n; ++i) {
-	for (j = i+1; j < n; ++j) {
-	    int dom = dominates(points, i, j, d);
-	    if (dom < 0) { /* j dominates i */
-		bitstring_set(S[j], i);
-		++N[i];
-	    } else if (dom > 0) { /* i dominates j */
-		bitstring_set(S[i], j);
-		++N[j];
-	    } else { /* neither dominates the other */
-	    }
-	}
-    }
-
-    /* Assign initial ranks: */
-    for (i = 0; i < n; ++i) {
-	if (0 == N[i]) { /* Member of first front */
-	    rank[i] = 1;
-	    ++nsorted;
-	} else { /* Not yet decide what front i belongs to */
-	    rank[i] = 0;
-	}
-    }
-
-    /* Assign remaining ranks: */
-    unsigned int r = 1;
-    while (nsorted < ntosort) {
-	for (i = 0; i < n; ++i) {
-	    if (r != rank[i])  /* Skip all not in current rank */
-		continue;
-	    for (j = 0; j < n; ++j) {
-		if (bitstring_is_set(S[i], j)) { /* j in S_i */
-		    --N[j];
-		    if (0 == N[j]) { /* N_j == 0 -> assign rank */
-			rank[j] = r + 1;
-			++nsorted;
-		    }
-		}
-	    }
-	}
-	++r;
-	/* Emergency exit: */
-	if (r > n) {
-	    error("r > n. This should never happen. "
-		  "Please send a detailed bug report to the package author.");
-	}
-    }
-    
-    /* Free bitstrings and arrays */
-    for (i = 0; i < n; ++i)
-	bitstring_delete(S[i]);
-    Free(S);
-    Free(N);
-    UNPROTECT(1); /* s_rank */
-    return(s_rank);
+  /* Free bitstrings and arrays */
+  for (i = 0; i < n; ++i)
+    bitstring_delete(S[i]);
+  Free(S);
+  Free(N);
+  UNPROTECT(1); /* s_rank */
+  return (s_rank);
 }
 
 SEXP do_dominance_matrix(SEXP s_points) {
-    SEXP s_res;
-    R_len_t i, j;
-    
-    /* Unpack arguments:
-     * Note how we turn the nxd R matrix (which is stored in column major
-     * order) into a dxn C matrix where all individuals are stored
-     * consecutivly instead of interleaved.
-     */
-    UNPACK_REAL_MATRIX(s_points, points, d, n);
-    
-    /* Allocate result matrix.
-     * 
-     * res[i, j] == TRUE <=> i-th point dominates j-th point
-     */
-    PROTECT(s_res = allocMatrix(LGLSXP, n, n));
-    int *res = LOGICAL(s_res);
-    
-    /* Initialy all points are not dominated: */
-    for (i = 0; i < n * n; ++i) 
-	res[i] = FALSE;
-    
-    for (i = 0; i < n; ++i) {
-        for (j = i+1; j < n; ++j) {
-	    int dom = dominates(points, i, j, d);
-	    if (dom > 0) { /* i dominates j */
-		res[n * j + i] = TRUE;
-	    } else if (dom < 0) { /* j dominates i */
-		res[n * i + j] = TRUE;
-	    }
-	}
+  SEXP s_res;
+  R_len_t i, j;
+
+  /* Unpack arguments:
+   * Note how we turn the nxd R matrix (which is stored in column major
+   * order) into a dxn C matrix where all individuals are stored
+   * consecutivly instead of interleaved.
+   */
+  UNPACK_REAL_MATRIX(s_points, points, d, n);
+
+  /* Allocate result matrix.
+   *
+   * res[i, j] == TRUE <=> i-th point dominates j-th point
+   */
+  PROTECT(s_res = allocMatrix(LGLSXP, n, n));
+  int *res = LOGICAL(s_res);
+
+  /* Initialy all points are not dominated: */
+  for (i = 0; i < n * n; ++i)
+    res[i] = FALSE;
+
+  for (i = 0; i < n; ++i) {
+    for (j = i + 1; j < n; ++j) {
+      int dom = dominates(points, i, j, d);
+      if (dom > 0) { /* i dominates j */
+        res[n * j + i] = TRUE;
+      } else if (dom < 0) { /* j dominates i */
+        res[n * i + j] = TRUE;
+      }
     }
-    UNPROTECT(1); /* s_res */
-    return s_res;
+  }
+  UNPROTECT(1); /* s_res */
+  return s_res;
 }

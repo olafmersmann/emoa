@@ -6,3 +6,4 @@
 ^.dict.rds
 ^src/.*\.o
 ^src/.*\.so
+.clang-format
