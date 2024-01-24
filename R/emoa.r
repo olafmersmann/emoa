@@ -42,4 +42,7 @@
 ##' @useDynLib emoa do_sbx
 ##' @useDynLib emoa do_sympart
 ##' @useDynLib emoa do_dominance_matrix
+##'
+##' @importFrom graphics par
+##' @importFrom stats runif
 NA
