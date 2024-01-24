@@ -1,8 +1,8 @@
-^do$
+.clang-format
+^CRAN-SUBMISSION$
+^\.github$
+^cran-comments\.md$
 ^dist
 ^examples
-OSSMETADATA
-.github/
-^CRAN-SUBMISSION$
-^cran-comments\.md$
-^\.github$
+^rawdata$
+^src/*.o$
