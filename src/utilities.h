@@ -4,7 +4,7 @@
 #define HEADS 1
 #define TAILS 0
 
-int flip_coin();
+int flip_coin(void);
 
 double clip_to_limits(const double x, const double l, const double u);
 
