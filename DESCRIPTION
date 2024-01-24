@@ -2,10 +2,10 @@ Package: emoa
 Title: Evolutionary Multiobjective Optimization Algorithms
 Description: Collection of building blocks for the design and analysis
         of evolutionary multiobjective optimization algorithms.
-Author: Olaf Mersmann <olafm@statistik.tu-dortmund.de>
-Maintainer: Olaf Mersmann <olafm@statistik.tu-dortmund.de>
+Author: Olaf Mersmann <olafm@p-value.net>
+Maintainer: Olaf Mersmann <olafm@p-value.net>
 License: GPL-2
-URL: http://www.statistik.tu-dortmund.de/~olafm/software/emoa/
+URL: https://github.com/olafmersmann/emoa/ 
 LazyData: yes
-Version: 0.5-1.4
+Version: 0.5-2
 Suggests: testthat
