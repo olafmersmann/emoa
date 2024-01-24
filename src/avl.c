@@ -1,3 +1,4 @@
+#define VARIANT 4
 /*****************************************************************************
 
     avl.c - Source code for the AVL-tree library.
