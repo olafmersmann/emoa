@@ -27,9 +27,7 @@
   }
 }
 \source{
-  \url{
-    http://web.mysites.ntu.edu.sg/epnsugan/PublicSite/Shared\%20Documents/CEC2007-final-pdfs.zip
-  }
+	Formerly available at http://web.mysites.ntu.edu.sg/epnsugan/PublicSite/Shared\%20Documents/CEC2007-final-pdfs.zip
 }
 \examples{
   \dontrun{

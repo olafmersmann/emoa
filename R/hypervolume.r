@@ -39,7 +39,7 @@
 ##'
 ##' @references
 ##' This code uses version 1.3 of the hypervolume code available from
-##' \url{http://iridia.ulb.ac.be/~manuel/hypervolume}. For a
+##' \url{ https://lopez-ibanez.eu/hypervolume}. For a
 ##' description of the algorithm see
 ##'
 ##' Carlos M. Fonseca, Luis Paquete, and Manuel Lopez-Ibanez. \emph{An
