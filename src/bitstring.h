@@ -23,7 +23,7 @@ static R_INLINE void bitstring_initialize(bitstring_t *bs, size_t nbits) {
   const size_t size = bitstring_size(nbits);
   bs->string = (uint8_t *)malloc(size);
   if (NULL == bs->string)
-    error("Could not allocate bitstring of size %i.", size);
+    error("Could not allocate bitstring of size %zd.", size);
   memset(bs->string, 0, size);
 }
 
