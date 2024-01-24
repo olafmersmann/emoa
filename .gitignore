@@ -1,2 +1,4 @@
 skel/src/weight_vectors.h
 .*.swp
+src/*.o
+src/*.so
