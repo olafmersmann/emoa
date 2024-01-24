@@ -19,7 +19,7 @@
 
 static const double a = 1.0;
 static const double b = 10.0;
-static const double c = 8.0;
+/* static const double c = 8.0; */
 static const double c2 = 10.0; /* c + 2*a */
 
 #ifndef PI
