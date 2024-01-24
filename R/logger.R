@@ -19,7 +19,7 @@
 ##' \code{emoa_logger} providing useful defaults.
 ##' 
 ##' @export
-emoa_logger <- function(output, every=10L) {
+emoa_logger <- function(output, every=10L, ...) {
   force(output)
   force(every)
   
