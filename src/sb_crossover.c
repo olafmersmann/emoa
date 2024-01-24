@@ -1,3 +1,5 @@
+#include "extern.h"
+
 #include <R.h>
 #include <Rinternals.h>
 

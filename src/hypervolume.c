@@ -5,6 +5,7 @@
  *  Olaf Mersmann    <olafm@statistik.tu-dortmund.de>
  *
  */
+#include "extern.h"
 
 #include <stdlib.h>
 #include <stdio.h>

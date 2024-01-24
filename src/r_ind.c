@@ -26,6 +26,7 @@
 #include <math.h>
 #define error(...) exit(-1)
 #else
+#include "extern.h"
 #include <R.h>
 #include <Rmath.h>
 #include <Rinternals.h>

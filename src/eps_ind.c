@@ -25,6 +25,8 @@
  *   Olaf Mersmann <olafm@statistik.tu-dortmund.de>
  */
 
+#include "extern.h"
+
 #include <R.h>
 #include <Rmath.h>
 #include <Rinternals.h>

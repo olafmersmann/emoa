@@ -6,6 +6,7 @@
  * Author:
  *   Olaf Mersmann (OME) <olafm@statistik.tu-dortmund.de>
  */
+#include "extern.h"
 
 #include <R.h>
 #include <Rmath.h>
