@@ -200,6 +200,8 @@ SEXP do_unary_r2_ind(SEXP s_data, SEXP s_weights, SEXP s_ideal) {
   UNPACK_REAL_MATRIX(s_data, data, k_data, n_data);
   UNPACK_REAL_MATRIX(s_weights, weights, k_weights, n_weights);
   UNPACK_REAL_VECTOR(s_ideal, ideal, n_ideal);
+  (void)n_ideal; /* Suppress unused variable warning */
+  (void)k_weights; /* Suppress unused variable warning */
   const int n_objectives = k_data;
   double res = 0.0;
   /* Calculate r criterion */
