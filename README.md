@@ -1,11 +1,10 @@
 # emoa
 
-## Install from github
+<!-- badges: start -->
+[![OSS Lifecycle](https://img.shields.io/osslifecycle/olafmersmann/sendmailR)](https://lifecycle.r-lib.org/articles/stages.html)
+[![CRAN status](https://www.r-pkg.org/badges/version/sendmailR)](https://CRAN.R-project.org/package=sendmailR) 
+[![CRAN Downloads](http://cranlogs.r-pkg.org/badges/sendmailR)](https://CRAN.R-project.org/package=sendmailR) 
+[![CRAN Downloads](http://cranlogs.r-pkg.org/badges/grand-total/sendmailR)](https://CRAN.R-project.org/package=sendmailR)
+<!-- badges: end -->
 
-Run this in R to install the current GitHub version (requires the `devtools`
-package):
-
-```splus
-library("devtools")
-install_github("olafmersmann/emoa")
-```
+A collection of building blocks for the design and analysis of evolutionary multiobjective optimization algorithms.
