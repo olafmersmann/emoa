@@ -1,9 +1,8 @@
-^dist/
-^do
-^examples/
-^rawdata/
-^check-.*/
-^.dict.rds
-^src/.*\.o
-^src/.*\.so
-.clang-format
+^do$
+^dist
+^examples
+OSSMETADATA
+.github/
+^CRAN-SUBMISSION$
+^cran-comments\.md$
+^\.github$
