@@ -122,8 +122,8 @@ SEXP nondominated_order(SEXP s_points, SEXP s_tosort) {
   /* Use compact bitstring for speed and ease of managment instead
    * of a dynamicly sized array of arrays or linked lists.
    */
-  bitstring_t *S = (bitstring_t *)Calloc(n, bitstring_t);
-  unsigned int *N = (unsigned int *)Calloc(n, unsigned int);
+  bitstring_t *S = (bitstring_t *) R_Calloc(n, bitstring_t);
+  unsigned int *N = (unsigned int *) R_Calloc(n, unsigned int);
 
   /* Allocate result vector: */
   PROTECT(s_rank = allocVector(INTSXP, n));
@@ -194,8 +194,8 @@ SEXP nondominated_order(SEXP s_points, SEXP s_tosort) {
   /* Free bitstrings and arrays */
   for (i = 0; i < n; ++i)
     bitstring_delete(S[i]);
-  Free(S);
-  Free(N);
+  R_Free(S);
+  R_Free(N);
   UNPROTECT(1); /* s_rank */
   return (s_rank);
 }

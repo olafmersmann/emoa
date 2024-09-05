@@ -13,7 +13,7 @@
  * the source code.
  *
  * Author:
- *  Olaf Mersmann (OME) <olafm@statistik.tu-dortmund.de>
+ *  Olaf Mersmann (OME) <olafm@p->
  *
  */
 
@@ -27,10 +27,7 @@
 #include "sexp_macros.h"
 
 /* We have our own definition of PI: */
-#if defined(PI)
-#undef PI
-#endif
-#define PI 3.1415926535897932384626433832795
+#define CEC_PI 3.1415926535897932384626433832795
 
 #define MYSIGN(x) ((x) > 0 ? 1.0 : -1.0)
 
@@ -41,7 +38,7 @@ static void UF1(double *x, double *f, const unsigned int nx) {
   sum1 = sum2 = 0.0;
   count1 = count2 = 0;
   for (j = 2; j <= nx; j++) {
-    yj = x[j - 1] - sin(6.0 * PI * x[0] + j * PI / nx);
+    yj = x[j - 1] - sin(6.0 * CEC_PI * x[0] + j * CEC_PI / nx);
     yj = yj * yj;
     if (j % 2 == 0) {
       sum2 += yj;
@@ -65,15 +62,15 @@ static void UF2(double *x, double *f, const unsigned int nx) {
     if (j % 2 == 0) {
       yj = x[j - 1] -
            0.3 * x[0] *
-               (x[0] * cos(24.0 * PI * x[0] + 4.0 * j * PI / nx) + 2.0) *
-               sin(6.0 * PI * x[0] + j * PI / nx);
+               (x[0] * cos(24.0 * CEC_PI * x[0] + 4.0 * j * CEC_PI / nx) + 2.0) *
+               sin(6.0 * CEC_PI * x[0] + j * CEC_PI / nx);
       sum2 += yj * yj;
       count2++;
     } else {
       yj = x[j - 1] -
            0.3 * x[0] *
-               (x[0] * cos(24.0 * PI * x[0] + 4.0 * j * PI / nx) + 2.0) *
-               cos(6.0 * PI * x[0] + j * PI / nx);
+               (x[0] * cos(24.0 * CEC_PI * x[0] + 4.0 * j * CEC_PI / nx) + 2.0) *
+               cos(6.0 * CEC_PI * x[0] + j * CEC_PI / nx);
       sum1 += yj * yj;
       count1++;
     }
@@ -91,7 +88,7 @@ static void UF3(double *x, double *f, const unsigned int nx) {
   prod1 = prod2 = 1.0;
   for (j = 2; j <= nx; j++) {
     yj = x[j - 1] - pow(x[0], 0.5 * (1.0 + 3.0 * (j - 2.0) / (nx - 2.0)));
-    pj = cos(20.0 * yj * PI / sqrt(j + 0.0));
+    pj = cos(20.0 * yj * CEC_PI / sqrt(j + 0.0));
     if (j % 2 == 0) {
       sum2 += yj * yj;
       prod2 *= pj;
@@ -114,7 +111,7 @@ static void UF4(double *x, double *f, const unsigned int nx) {
   sum1 = sum2 = 0.0;
   count1 = count2 = 0;
   for (j = 2; j <= nx; j++) {
-    yj = x[j - 1] - sin(6.0 * PI * x[0] + j * PI / nx);
+    yj = x[j - 1] - sin(6.0 * CEC_PI * x[0] + j * CEC_PI / nx);
     hj = fabs(yj) / (1.0 + exp(2.0 * fabs(yj)));
     if (j % 2 == 0) {
       sum2 += hj;
@@ -137,8 +134,8 @@ static void UF5(double *x, double *f, const unsigned int nx) {
   N = 10.0;
   E = 0.1;
   for (j = 2; j <= nx; j++) {
-    yj = x[j - 1] - sin(6.0 * PI * x[0] + j * PI / nx);
-    hj = 2.0 * yj * yj - cos(4.0 * PI * yj) + 1.0;
+    yj = x[j - 1] - sin(6.0 * CEC_PI * x[0] + j * CEC_PI / nx);
+    hj = 2.0 * yj * yj - cos(4.0 * CEC_PI * yj) + 1.0;
     if (j % 2 == 0) {
       sum2 += hj;
       count2++;
@@ -147,7 +144,7 @@ static void UF5(double *x, double *f, const unsigned int nx) {
       count1++;
     }
   }
-  hj = (0.5 / N + E) * fabs(sin(2.0 * N * PI * x[0]));
+  hj = (0.5 / N + E) * fabs(sin(2.0 * N * CEC_PI * x[0]));
   f[0] = x[0] + hj + 2.0 * sum1 / (double)count1;
   f[1] = 1.0 - x[0] + hj + 2.0 * sum2 / (double)count2;
 }
@@ -162,8 +159,8 @@ static void UF6(double *x, double *f, const unsigned int nx) {
   count1 = count2 = 0;
   prod1 = prod2 = 1.0;
   for (j = 2; j <= nx; j++) {
-    yj = x[j - 1] - sin(6.0 * PI * x[0] + j * PI / nx);
-    pj = cos(20.0 * yj * PI / sqrt(j + 0.0));
+    yj = x[j - 1] - sin(6.0 * CEC_PI * x[0] + j * CEC_PI / nx);
+    pj = cos(20.0 * yj * CEC_PI / sqrt(j + 0.0));
     if (j % 2 == 0) {
       sum2 += yj * yj;
       prod2 *= pj;
@@ -175,7 +172,7 @@ static void UF6(double *x, double *f, const unsigned int nx) {
     }
   }
 
-  hj = 2.0 * (0.5 / N + E) * sin(2.0 * N * PI * x[0]);
+  hj = 2.0 * (0.5 / N + E) * sin(2.0 * N * CEC_PI * x[0]);
   if (hj < 0.0)
     hj = 0.0;
   f[0] = x[0] + hj + 2.0 * (4.0 * sum1 - 2.0 * prod1 + 2.0) / (double)count1;
@@ -190,7 +187,7 @@ static void UF7(double *x, double *f, const unsigned int nx) {
   sum1 = sum2 = 0.0;
   count1 = count2 = 0;
   for (j = 2; j <= nx; j++) {
-    yj = x[j - 1] - sin(6.0 * PI * x[0] + j * PI / nx);
+    yj = x[j - 1] - sin(6.0 * CEC_PI * x[0] + j * CEC_PI / nx);
     if (j % 2 == 0) {
       sum2 += yj * yj;
       count2++;
@@ -211,7 +208,7 @@ static void UF8(double *x, double *f, const unsigned int nx) {
   sum1 = sum2 = sum3 = 0.0;
   count1 = count2 = count3 = 0;
   for (j = 3; j <= nx; j++) {
-    yj = x[j - 1] - 2.0 * x[1] * sin(2.0 * PI * x[0] + j * PI / nx);
+    yj = x[j - 1] - 2.0 * x[1] * sin(2.0 * CEC_PI * x[0] + j * CEC_PI / nx);
     if (j % 3 == 1) {
       sum1 += yj * yj;
       count1++;
@@ -224,10 +221,10 @@ static void UF8(double *x, double *f, const unsigned int nx) {
     }
   }
   f[0] =
-      cos(0.5 * PI * x[0]) * cos(0.5 * PI * x[1]) + 2.0 * sum1 / (double)count1;
+      cos(0.5 * CEC_PI * x[0]) * cos(0.5 * CEC_PI * x[1]) + 2.0 * sum1 / (double)count1;
   f[1] =
-      cos(0.5 * PI * x[0]) * sin(0.5 * PI * x[1]) + 2.0 * sum2 / (double)count2;
-  f[2] = sin(0.5 * PI * x[0]) + 2.0 * sum3 / (double)count3;
+      cos(0.5 * CEC_PI * x[0]) * sin(0.5 * CEC_PI * x[1]) + 2.0 * sum2 / (double)count2;
+  f[2] = sin(0.5 * CEC_PI * x[0]) + 2.0 * sum3 / (double)count3;
 }
 
 static void UF9(double *x, double *f, const unsigned int nx) {
@@ -238,7 +235,7 @@ static void UF9(double *x, double *f, const unsigned int nx) {
   sum1 = sum2 = sum3 = 0.0;
   count1 = count2 = count3 = 0;
   for (j = 3; j <= nx; j++) {
-    yj = x[j - 1] - 2.0 * x[1] * sin(2.0 * PI * x[0] + j * PI / nx);
+    yj = x[j - 1] - 2.0 * x[1] * sin(2.0 * CEC_PI * x[0] + j * CEC_PI / nx);
     if (j % 3 == 1) {
       sum1 += yj * yj;
       count1++;
@@ -265,8 +262,8 @@ static void UF10(double *x, double *f, const unsigned int nx) {
   sum1 = sum2 = sum3 = 0.0;
   count1 = count2 = count3 = 0;
   for (j = 3; j <= nx; j++) {
-    yj = x[j - 1] - 2.0 * x[1] * sin(2.0 * PI * x[0] + j * PI / nx);
-    hj = 4.0 * yj * yj - cos(8.0 * PI * yj) + 1.0;
+    yj = x[j - 1] - 2.0 * x[1] * sin(2.0 * CEC_PI * x[0] + j * CEC_PI / nx);
+    hj = 4.0 * yj * yj - cos(8.0 * CEC_PI * yj) + 1.0;
     if (j % 3 == 1) {
       sum1 += hj;
       count1++;
@@ -279,10 +276,10 @@ static void UF10(double *x, double *f, const unsigned int nx) {
     }
   }
   f[0] =
-      cos(0.5 * PI * x[0]) * cos(0.5 * PI * x[1]) + 2.0 * sum1 / (double)count1;
+      cos(0.5 * CEC_PI * x[0]) * cos(0.5 * CEC_PI * x[1]) + 2.0 * sum1 / (double)count1;
   f[1] =
-      cos(0.5 * PI * x[0]) * sin(0.5 * PI * x[1]) + 2.0 * sum2 / (double)count2;
-  f[2] = sin(0.5 * PI * x[0]) + 2.0 * sum3 / (double)count3;
+      cos(0.5 * CEC_PI * x[0]) * sin(0.5 * CEC_PI * x[1]) + 2.0 * sum2 / (double)count2;
+  f[2] = sin(0.5 * CEC_PI * x[0]) + 2.0 * sum3 / (double)count3;
 }
 
 #define UF_2D_WRAPPER(U)                                                       \
@@ -374,7 +371,7 @@ void CF1(double *x, double *f, double *c, const unsigned int nx)
 		}
 		f[0] = x[0]		  + 2.0*sum1 / (double)count1;
 		f[1] = 1.0 - x[0] + 2.0*sum2 / (double)count2;
-		c[0] = f[1] + f[0] - a*fabs(sin(N*PI*(f[0]-f[1]+1.0))) - 1.0; 
+		c[0] = f[1] + f[0] - a*fabs(sin(N*CEC_PI*(f[0]-f[1]+1.0))) - 1.0; 
 	}
 
 	void CF2(double *x, double *f, double *c, const unsigned int nx)
@@ -389,20 +386,20 @@ void CF1(double *x, double *f, double *c, const unsigned int nx)
 		{
 			if (j % 2 == 1) 
 			{
-				yj = x[j-1] - sin(6.0*PI*x[0] + j*PI/nx);
+				yj = x[j-1] - sin(6.0*CEC_PI*x[0] + j*CEC_PI/nx);
 				sum1  += yj*yj;
 				count1++;
 			} 
 			else 
 			{
-				yj = x[j-1] - cos(6.0*PI*x[0] + j*PI/nx);
+				yj = x[j-1] - cos(6.0*CEC_PI*x[0] + j*CEC_PI/nx);
 				sum2  += yj*yj;
 				count2++;
 			}
 		}
 		f[0] = x[0]		        + 2.0*sum1 / (double)count1;
 		f[1] = 1.0 - sqrt(x[0]) + 2.0*sum2 / (double)count2;
-		t	 = f[1] + sqrt(f[0]) - a*sin(N*PI*(sqrt(f[0])-f[1]+1.0)) - 1.0;
+		t	 = f[1] + sqrt(f[0]) - a*sin(N*CEC_PI*(sqrt(f[0])-f[1]+1.0)) - 1.0;
 		c[0] = MYSIGN(t)*fabs(t)/(1+exp(4.0*fabs(t)));
 	}
 
@@ -417,8 +414,8 @@ void CF1(double *x, double *f, double *c, const unsigned int nx)
 		prod1  = prod2  = 1.0;
 		for(j = 2; j <= nx; j++) 
 		{
-			yj = x[j-1]-sin(6.0*PI*x[0]+j*PI/nx);
-			pj = cos(20.0*yj*PI/sqrt(j+0.0));
+			yj = x[j-1]-sin(6.0*CEC_PI*x[0]+j*CEC_PI/nx);
+			pj = cos(20.0*yj*CEC_PI/sqrt(j+0.0));
 			if (j % 2 == 0) 
 			{
 				sum2  += yj*yj;
@@ -435,7 +432,7 @@ void CF1(double *x, double *f, double *c, const unsigned int nx)
 
 		f[0] = x[0]	           + 2.0*(4.0*sum1 - 2.0*prod1 + 2.0) / (double)count1;
 		f[1] = 1.0 - x[0]*x[0] + 2.0*(4.0*sum2 - 2.0*prod2 + 2.0) / (double)count2;
-		c[0] = f[1] + f[0]*f[0] - a*sin(N*PI*(f[0]*f[0]-f[1]+1.0)) - 1.0;
+		c[0] = f[1] + f[0]*f[0] - a*sin(N*CEC_PI*(f[0]*f[0]-f[1]+1.0)) - 1.0;
 	}
 
 	void CF4(double *x, double *f, double *c, const unsigned int nx)
@@ -446,7 +443,7 @@ void CF1(double *x, double *f, double *c, const unsigned int nx)
 		sum1   = sum2   = 0.0;
 		for(j = 2; j <= nx; j++) 
 		{
-			yj = x[j-1] - sin(6.0*PI*x[0] + j*PI/nx);
+			yj = x[j-1] - sin(6.0*CEC_PI*x[0] + j*CEC_PI/nx);
 			if (j % 2 == 1) 
 			{
 				sum1  += yj*yj;
@@ -461,7 +458,7 @@ void CF1(double *x, double *f, double *c, const unsigned int nx)
 		}
 		f[0] = x[0]		  + sum1;
 		f[1] = 1.0 - x[0] + sum2;
-		t	 = x[1] - sin(6.0*x[0]*PI+2.0*PI/nx) - 0.5*x[0] + 0.25;
+		t	 = x[1] - sin(6.0*x[0]*CEC_PI+2.0*CEC_PI/nx) - 0.5*x[0] + 0.25;
 		c[0] = MYSIGN(t)*fabs(t)/(1+exp(4.0*fabs(t)));
 	}
 
@@ -475,21 +472,21 @@ void CF1(double *x, double *f, double *c, const unsigned int nx)
 		{
 			if (j % 2 == 1) 
 			{
-				yj    = x[j-1] - 0.8*x[0]*cos(6.0*PI*x[0] + j*PI/nx);
-				sum1 += 2.0*yj*yj - cos(4.0*PI*yj) + 1.0;
+				yj    = x[j-1] - 0.8*x[0]*cos(6.0*CEC_PI*x[0] + j*CEC_PI/nx);
+				sum1 += 2.0*yj*yj - cos(4.0*CEC_PI*yj) + 1.0;
 			} 
 			else 
 			{
-				yj = x[j-1] - 0.8*x[0]*sin(6.0*PI*x[0] + j*PI/nx);
+				yj = x[j-1] - 0.8*x[0]*sin(6.0*CEC_PI*x[0] + j*CEC_PI/nx);
 				if (j==2)
 					sum2 += yj < 1.5-0.75*sqrt(2.0) ? fabs(yj) : (0.125+(yj-1)*(yj-1));
 				else
-					sum2 += 2.0*yj*yj - cos(4.0*PI*yj) + 1.0;
+					sum2 += 2.0*yj*yj - cos(4.0*CEC_PI*yj) + 1.0;
 			}
 		}
 		f[0] = x[0]		  + sum1;
 		f[1] = 1.0 - x[0] + sum2;
-		c[0] = x[1] - 0.8*x[0]*sin(6.0*x[0]*PI+2.0*PI/nx) - 0.5*x[0] + 0.25;
+		c[0] = x[1] - 0.8*x[0]*sin(6.0*x[0]*CEC_PI+2.0*CEC_PI/nx) - 0.5*x[0] + 0.25;
 	}
 
 	void CF6(double *x, double *f, double *c, const unsigned int nx)
@@ -502,19 +499,19 @@ void CF1(double *x, double *f, double *c, const unsigned int nx)
 		{
 			if (j % 2 == 1) 
 			{
-				yj     = x[j-1] - 0.8*x[0]*cos(6.0*PI*x[0] + j*PI/nx);
+				yj     = x[j-1] - 0.8*x[0]*cos(6.0*CEC_PI*x[0] + j*CEC_PI/nx);
 				sum1  += yj*yj;
 			} 
 			else 
 			{
-				yj     = x[j-1] - 0.8*x[0]*sin(6.0*PI*x[0] + j*PI/nx);
+				yj     = x[j-1] - 0.8*x[0]*sin(6.0*CEC_PI*x[0] + j*CEC_PI/nx);
 				sum2  += yj*yj;
 			}
 		}
 		f[0] = x[0]		                 + sum1;
 		f[1] = (1.0 - x[0])*(1.0 - x[0]) + sum2;
-		c[0] = x[1]-0.8*x[0]*sin(6.0*x[0]*PI+2.0*PI/nx) - MYSIGN((x[0]-0.5)*(1.0-x[0]))*sqrt(fabs((x[0]-0.5)*(1.0-x[0])));
-		c[1] = x[3]-0.8*x[0]*sin(6.0*x[0]*PI+4.0*PI/nx) - MYSIGN(0.25*sqrt(1-x[0])-0.5*(1.0-x[0]))*sqrt(fabs(0.25*sqrt(1-x[0])-0.5*(1.0-x[0])));
+		c[0] = x[1]-0.8*x[0]*sin(6.0*x[0]*CEC_PI+2.0*CEC_PI/nx) - MYSIGN((x[0]-0.5)*(1.0-x[0]))*sqrt(fabs((x[0]-0.5)*(1.0-x[0])));
+		c[1] = x[3]-0.8*x[0]*sin(6.0*x[0]*CEC_PI+4.0*CEC_PI/nx) - MYSIGN(0.25*sqrt(1-x[0])-0.5*(1.0-x[0]))*sqrt(fabs(0.25*sqrt(1-x[0])-0.5*(1.0-x[0])));
 	}
 
 	void CF7(double *x, double *f, double *c, const unsigned int nx)
@@ -527,22 +524,22 @@ void CF1(double *x, double *f, double *c, const unsigned int nx)
 		{
 			if (j % 2 == 1) 
 			{
-				yj     = x[j-1] - cos(6.0*PI*x[0] + j*PI/nx);
-				sum1  += 2.0*yj*yj-cos(4.0*PI*yj)+1.0;
+				yj     = x[j-1] - cos(6.0*CEC_PI*x[0] + j*CEC_PI/nx);
+				sum1  += 2.0*yj*yj-cos(4.0*CEC_PI*yj)+1.0;
 			} 
 			else 
 			{
-				yj     = x[j-1] - sin(6.0*PI*x[0] + j*PI/nx);
+				yj     = x[j-1] - sin(6.0*CEC_PI*x[0] + j*CEC_PI/nx);
 				if (j==2 || j==4)
 					sum2 += yj*yj;
 				else
-					sum2  += 2.0*yj*yj-cos(4.0*PI*yj)+1.0;
+					sum2  += 2.0*yj*yj-cos(4.0*CEC_PI*yj)+1.0;
 			}
 		}
 		f[0] = x[0]		                 + sum1;
 		f[1] = (1.0 - x[0])*(1.0 - x[0]) + sum2;
-		c[0] = x[1]-sin(6.0*x[0]*PI+2.0*PI/nx) - MYSIGN((x[0]-0.5)*(1.0-x[0]))*sqrt(fabs((x[0]-0.5)*(1.0-x[0])));
-		c[1] = x[3]-sin(6.0*x[0]*PI+4.0*PI/nx) - MYSIGN(0.25*sqrt(1-x[0])-0.5*(1.0-x[0]))*sqrt(fabs(0.25*sqrt(1-x[0])-0.5*(1.0-x[0])));
+		c[0] = x[1]-sin(6.0*x[0]*CEC_PI+2.0*CEC_PI/nx) - MYSIGN((x[0]-0.5)*(1.0-x[0]))*sqrt(fabs((x[0]-0.5)*(1.0-x[0])));
+		c[1] = x[3]-sin(6.0*x[0]*CEC_PI+4.0*CEC_PI/nx) - MYSIGN(0.25*sqrt(1-x[0])-0.5*(1.0-x[0]))*sqrt(fabs(0.25*sqrt(1-x[0])-0.5*(1.0-x[0])));
 	}
 	
 	void CF8(double *x, double *f, double *c, const unsigned int nx)
@@ -555,7 +552,7 @@ void CF1(double *x, double *f, double *c, const unsigned int nx)
 		count1 = count2 = count3 = 0;
 		for(j = 3; j <= nx; j++) 
 		{
-			yj = x[j-1] - 2.0*x[1]*sin(2.0*PI*x[0]+j*PI/nx);
+			yj = x[j-1] - 2.0*x[1]*sin(2.0*CEC_PI*x[0]+j*CEC_PI/nx);
 			if(j % 3 == 1) 
 			{
 				sum1  += yj*yj;
@@ -572,10 +569,10 @@ void CF1(double *x, double *f, double *c, const unsigned int nx)
 				count3++;
 			}
 		}
-		f[0] = cos(0.5*PI*x[0])*cos(0.5*PI*x[1]) + 2.0*sum1 / (double)count1;
-		f[1] = cos(0.5*PI*x[0])*sin(0.5*PI*x[1]) + 2.0*sum2 / (double)count2;
-		f[2] = sin(0.5*PI*x[0])                  + 2.0*sum3 / (double)count3;
-		c[0] = (f[0]*f[0]+f[1]*f[1])/(1-f[2]*f[2]) - a*fabs(sin(N*PI*((f[0]*f[0]-f[1]*f[1])/(1-f[2]*f[2])+1.0))) + 1.0;
+		f[0] = cos(0.5*CEC_PI*x[0])*cos(0.5*CEC_PI*x[1]) + 2.0*sum1 / (double)count1;
+		f[1] = cos(0.5*CEC_PI*x[0])*sin(0.5*CEC_PI*x[1]) + 2.0*sum2 / (double)count2;
+		f[2] = sin(0.5*CEC_PI*x[0])                  + 2.0*sum3 / (double)count3;
+		c[0] = (f[0]*f[0]+f[1]*f[1])/(1-f[2]*f[2]) - a*fabs(sin(N*CEC_PI*((f[0]*f[0]-f[1]*f[1])/(1-f[2]*f[2])+1.0))) + 1.0;
 	}
 
 	void CF9(double *x, double *f, double *c, const unsigned int nx)
@@ -588,7 +585,7 @@ void CF1(double *x, double *f, double *c, const unsigned int nx)
 		count1 = count2 = count3 = 0;
 		for(j = 3; j <= nx; j++) 
 		{
-			yj = x[j-1] - 2.0*x[1]*sin(2.0*PI*x[0]+j*PI/nx);
+			yj = x[j-1] - 2.0*x[1]*sin(2.0*CEC_PI*x[0]+j*CEC_PI/nx);
 			if(j % 3 == 1) 
 			{
 				sum1  += yj*yj;
@@ -605,10 +602,10 @@ void CF1(double *x, double *f, double *c, const unsigned int nx)
 				count3++;
 			}
 		}
-		f[0] = cos(0.5*PI*x[0])*cos(0.5*PI*x[1]) + 2.0*sum1 / (double)count1;
-		f[1] = cos(0.5*PI*x[0])*sin(0.5*PI*x[1]) + 2.0*sum2 / (double)count2;
-		f[2] = sin(0.5*PI*x[0])                  + 2.0*sum3 / (double)count3;
-		c[0] = (f[0]*f[0]+f[1]*f[1])/(1-f[2]*f[2]) - a*sin(N*PI*((f[0]*f[0]-f[1]*f[1])/(1-f[2]*f[2])+1.0)) + 1.0;
+		f[0] = cos(0.5*CEC_PI*x[0])*cos(0.5*CEC_PI*x[1]) + 2.0*sum1 / (double)count1;
+		f[1] = cos(0.5*CEC_PI*x[0])*sin(0.5*CEC_PI*x[1]) + 2.0*sum2 / (double)count2;
+		f[2] = sin(0.5*CEC_PI*x[0])                  + 2.0*sum3 / (double)count3;
+		c[0] = (f[0]*f[0]+f[1]*f[1])/(1-f[2]*f[2]) - a*sin(N*CEC_PI*((f[0]*f[0]-f[1]*f[1])/(1-f[2]*f[2])+1.0)) + 1.0;
 	}
 
 	void CF10(double *x, double *f, double *c, const unsigned int nx)
@@ -621,8 +618,8 @@ void CF1(double *x, double *f, double *c, const unsigned int nx)
 		count1 = count2 = count3 = 0;
 		for(j = 3; j <= nx; j++) 
 		{
-			yj = x[j-1] - 2.0*x[1]*sin(2.0*PI*x[0]+j*PI/nx);
-			hj = 4.0*yj*yj - cos(8.0*PI*yj) + 1.0;
+			yj = x[j-1] - 2.0*x[1]*sin(2.0*CEC_PI*x[0]+j*CEC_PI/nx);
+			hj = 4.0*yj*yj - cos(8.0*CEC_PI*yj) + 1.0;
 			if(j % 3 == 1) 
 			{
 				sum1  += hj;
@@ -639,10 +636,10 @@ void CF1(double *x, double *f, double *c, const unsigned int nx)
 				count3++;
 			}
 		}
-		f[0] = cos(0.5*PI*x[0])*cos(0.5*PI*x[1]) + 2.0*sum1 / (double)count1;
-		f[1] = cos(0.5*PI*x[0])*sin(0.5*PI*x[1]) + 2.0*sum2 / (double)count2;
-		f[2] = sin(0.5*PI*x[0])                  + 2.0*sum3 / (double)count3;
-		c[0] = (f[0]*f[0]+f[1]*f[1])/(1-f[2]*f[2]) - a*sin(N*PI*((f[0]*f[0]-f[1]*f[1])/(1-f[2]*f[2])+1.0)) + 1.0;
+		f[0] = cos(0.5*CEC_PI*x[0])*cos(0.5*CEC_PI*x[1]) + 2.0*sum1 / (double)count1;
+		f[1] = cos(0.5*CEC_PI*x[0])*sin(0.5*CEC_PI*x[1]) + 2.0*sum2 / (double)count2;
+		f[2] = sin(0.5*CEC_PI*x[0])                  + 2.0*sum3 / (double)count3;
+		c[0] = (f[0]*f[0]+f[1]*f[1])/(1-f[2]*f[2]) - a*sin(N*CEC_PI*((f[0]*f[0]-f[1]*f[1])/(1-f[2]*f[2])+1.0)) + 1.0;
 	}
 	
 	/*
@@ -771,12 +768,12 @@ void CF1(double *x, double *f, double *c, const unsigned int nx)
 			double ff = (1 + g);
 			for (j = n_obj - i; j >= 1; j--)
 			{
-				ff *= cos(zz[j-1] * PI / 2.0);
+				ff *= cos(zz[j-1] * CEC_PI / 2.0);
 				psum[i-1] = sqrt( pow(psum[i-1],2) + pow(p[j-1],2) );
 			}
 			if (i > 1)
 			{
-				ff *= sin(zz[(n_obj - i + 1) - 1] * PI / 2.0);
+				ff *= sin(zz[(n_obj - i + 1) - 1] * CEC_PI / 2.0);
 				psum[i-1] = sqrt( pow(psum[i-1],2) + pow(p[(n_obj - i + 1) - 1],2) );
 			}
 			
@@ -892,7 +889,7 @@ void CF1(double *x, double *f, double *c, const unsigned int nx)
 		
 		for (i = nx - k + 1; i <= nx; i++)
 		{
-			g += pow(zz[i-1]-0.5,2) - cos(20 * PI * (zz[i-1]-0.5));
+			g += pow(zz[i-1]-0.5,2) - cos(20 * CEC_PI * (zz[i-1]-0.5));
 			for(j=0;j<n_obj;j++)
 			{
 				psum[j]= sqrt( pow(psum[j],2) + pow(p[i-1],2) );
@@ -904,12 +901,12 @@ void CF1(double *x, double *f, double *c, const unsigned int nx)
 			double ff = (1 + g);
 			for (j = n_obj - i; j >= 1; j--)
 			{
-				ff *= cos(zz[j-1] * PI / 2.0);
+				ff *= cos(zz[j-1] * CEC_PI / 2.0);
 				psum[i-1] = sqrt( pow(psum[i-1],2) + pow(p[j-1],2) );
 			}
 			if (i > 1)
 			{
-				ff *= sin(zz[(n_obj - i + 1) - 1] * PI / 2.0);
+				ff *= sin(zz[(n_obj - i + 1) - 1] * CEC_PI / 2.0);
 				psum[i-1] = sqrt( pow(psum[i-1],2) + pow(p[(n_obj - i + 1) - 1],2) );
 			}
 			
@@ -981,12 +978,12 @@ void CF1(double *x, double *f, double *c, const unsigned int nx)
 		double result = 1.0;	
 		for( i=1; i <= M-m; i++ )
 		{
-			result *= 1.0 - cos( x[i-1]*PI/2.0 );
+			result *= 1.0 - cos( x[i-1]*CEC_PI/2.0 );
 		}
 		
 		if( m != 1 )
 		{
-			result *= 1.0 - sin( x[M-m]*PI/2.0 );
+			result *= 1.0 - sin( x[M-m]*CEC_PI/2.0 );
 		}
 		
 		return correct_to_01( result, EPSILON );
@@ -999,12 +996,12 @@ void CF1(double *x, double *f, double *c, const unsigned int nx)
 		
 		for( i=1; i <= M-m; i++ )
 		{
-			result *= sin( x[i-1]*PI/2.0 );
+			result *= sin( x[i-1]*CEC_PI/2.0 );
 		}
 		
 		if( m != 1 )
 		{
-			result *= cos( x[M-m]*PI/2.0 );
+			result *= cos( x[M-m]*CEC_PI/2.0 );
 		}
 		
 		return correct_to_01( result, EPSILON );
@@ -1013,14 +1010,14 @@ void CF1(double *x, double *f, double *c, const unsigned int nx)
 	double mixed( const double *x, const int A, const double  alpha )
 	{
 		
-		const double tmp = 2.0*A*PI;		
-		return correct_to_01( pow( 1.0-x[0]-cos( tmp*x[0] + PI/2.0 )/tmp, alpha ), EPSILON );
+		const double tmp = 2.0*A*CEC_PI;		
+		return correct_to_01( pow( 1.0-x[0]-cos( tmp*x[0] + CEC_PI/2.0 )/tmp, alpha ), EPSILON );
 	}
 
 	double disc( const double *x, const int A, const double alpha, const double beta )
 	{
 		
-		const double tmp1 = A*pow( x[0], beta )*PI;
+		const double tmp1 = A*pow( x[0], beta )*CEC_PI;
 		return correct_to_01( 1.0 - pow( x[0], alpha )*pow( cos( tmp1 ), 2.0 ), EPSILON );
 		
 	}
@@ -1089,7 +1086,7 @@ double b_flat
 	 )
 	{
 			const double tmp1 = fabs( y-C )/( 2.0*( floor( C-y )+C ) );
-			const double tmp2 = ( 4.0*A+2.0 )*PI*( 0.5-tmp1 );
+			const double tmp2 = ( 4.0*A+2.0 )*CEC_PI*( 0.5-tmp1 );
 			
 			return correct_to_01( ( 1.0 + cos( tmp2 ) + 4.0*B*pow( tmp1, 2.0 ) )/( B+2.0 ), EPSILON );
 

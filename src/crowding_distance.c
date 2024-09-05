@@ -54,8 +54,8 @@ SEXP do_crowding_distance(SEXP s_front) {
   UNPACK_REAL_MATRIX(s_front, front, d, n);
 
   /* Work arrays: */
-  int *index = Calloc(n, int);
-  int *work = Calloc(n, int);
+  int *index = R_Calloc(n, int);
+  int *work = R_Calloc(n, int);
 
   /* Result: */
   PROTECT(s_res = allocVector(REALSXP, n));
@@ -74,8 +74,8 @@ SEXP do_crowding_distance(SEXP s_front) {
     }
   }
 
-  Free(work);
-  Free(index);
+  R_Free(work);
+  R_Free(index);
   UNPROTECT(1); /* s_res */
   return (s_res);
 }

@@ -23,10 +23,6 @@ static const double b = 10.0;
 /* static const double c = 8.0; */
 static const double c2 = 10.0; /* c + 2*a */
 
-#ifndef PI
-#define PI M_PI
-#endif
-
 #define MAX(a, b) ((a > b) ? a : b)
 
 /*
@@ -49,7 +45,7 @@ SEXP do_sympart(SEXP s_x) {
   R_len_t k;
   SEXP s_res;
 
-  const double omega = PI / 4.0;
+  const double omega = M_PI / 4.0;
   const double si = sin(omega);
   const double co = cos(omega);
 
