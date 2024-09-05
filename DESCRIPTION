@@ -3,13 +3,14 @@ Title: Evolutionary Multiobjective Optimization Algorithms
 Description: Collection of building blocks for the design and analysis
         of evolutionary multiobjective optimization algorithms.
 Authors@R: c(
-        person("Olaf", "Mersmann", role=c("aut", "cre"),
+        person("Olaf", "Mersmann", 
+               role=c("aut", "cre"),
                comment = c(ORCID = "0000-0002-7720-4939"),
                email = "olafm@p-value.net"))
 License: GPL-2
 URL: https://github.com/olafmersmann/emoa/ 
 LazyData: yes
-Version: 0.5-2
+Version: 0.5-3
 Suggests: testthat
 Encoding: UTF-8
 RoxygenNote: 7.2.3
