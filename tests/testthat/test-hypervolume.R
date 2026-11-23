@@ -32,6 +32,22 @@ test_that("dominated_hypervolume", {
   expect_warning(dominated_hypervolume(simpleFront, c(NaN, NaN)))
 })
 
+test_that("two-objective contributions use the reference point and input order", {
+  points <- matrix(c(1, 5, 2, 4, 3, 3, 4, 6, 5, 8), nrow=2)
+  order <- c(4, 3, 5, 2, 1)
+  expect_equal(hypervolume_contribution(points[, order], c(10, 10)),
+               c(5, 1, 7, 0, 0)[order])
+})
+
+test_that("two-objective contributions account for overlapping rectangles", {
+  points <- matrix(c(1, 1, 2, 2, 3, 0, 0, 4), nrow=2)
+  ref <- c(3, 3)
+  expect_equal(hypervolume_contribution(points, ref), c(3, 0, 0, 0))
+  expect_equal(hypervolume_contribution(points[, 1, drop=FALSE], ref), 4)
+  expect_equal(hypervolume_contribution(cbind(points, points[, 1]), ref),
+               rep(0, 5))
+})
+
 test_that("bad_front", {
   ## OME: Should probably also return NaN instead of NA
   suppressWarnings(expect_equal(is.na(dominated_hypervolume(naFront)), TRUE))

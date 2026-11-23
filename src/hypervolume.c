@@ -10,38 +10,52 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include <limits.h>
-#include <float.h>
 
 #include <R.h>
 #include <Rmath.h>
 #include <Rinternals.h>
 #include <R_ext/Applic.h>
+#include <R_ext/Utils.h>
 
 #include "sexp_macros.h"
 
 #include "hv.h"
 
-void calc_hv_contrib_2d(const double *data, double *res, const size_t n,
-                        const size_t k) {
-  size_t i, j, l;
-  double mindistplus;
-
-  for (i = 0; i < n; ++i) {
-    double dvol = 1.0;
-    for (j = 0; j < k; ++j) {
-      const double fij = data[k * i + j];
-      mindistplus = DBL_MAX;
-      for (l = 0; l < n; ++l) {
-        if (l != i) {
-          const double flj = data[k * l + j];
-          const double delta = flj - fij;
-          if (delta >= 0.0 && delta < mindistplus)
-            mindistplus = delta;
-        }
-      }
-      dvol *= mindistplus;
+void calc_hv_contrib_2d(const double *data, const double *ref, double *res,
+                        const int n) {
+  double *x = (double *)R_alloc(n, sizeof(double));
+  int *index = (int *)R_alloc(n, sizeof(int));
+  int count = 0;
+  for (int i = 0; i < n; ++i) {
+    const double *point = data + 2 * (size_t)i;
+    res[i] = 0.0;
+    if (point[0] < ref[0] && point[1] < ref[1]) {
+      x[count] = point[0];
+      index[count] = i;
+      ++count;
     }
-    res[i] = dvol;
+  }
+
+  if (count > 1)
+    R_qsort_I(x, index, 1, count);
+
+  double lowest_y = ref[1];
+  double second_y = ref[1];
+  int lowest_index = 0;
+  for (int i = 0; i < count; ++i) {
+    const double y = data[2 * (size_t)index[i] + 1];
+    if (y < lowest_y) {
+      second_y = lowest_y;
+      lowest_y = y;
+      lowest_index = index[i];
+    } else if (y < second_y) {
+      second_y = y;
+    }
+
+    /* Only the lowest rectangle covers the strip below the second lowest. */
+    const double next_x = i + 1 < count ? x[i + 1] : ref[0];
+    if (x[i] < next_x && lowest_y < second_y)
+      res[lowest_index] += (next_x - x[i]) * (second_y - lowest_y);
   }
 }
 
@@ -104,7 +118,7 @@ SEXP do_hv_contrib(SEXP s_data, SEXP s_ref) {
 
   switch (k_data) {
   case 2:
-    calc_hv_contrib_2d(data, res, n_data, k_data);
+    calc_hv_contrib_2d(data, ref, res, n_data);
     break;
   default:
     /* calc_hv_contrib modifies 'data', so we need to make sure we
